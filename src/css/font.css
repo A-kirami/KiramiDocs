@@ -1,0 +1,29 @@
+@import url('/font/SweiSpringSugar-Black/style.css');
+@import url('/font/SourceHanSansCN-VF/style.css');
+
+@font-face {
+    font-family: "FiraCode-VF";
+    src: url("/font/FiraCode-VF.woff2");
+    font-weight: 300 700;
+    font-display: swap;
+}
+
+body {
+    font-family: "SourceHanSansCN-VF", sans-serif;
+}
+
+pre,
+code {
+    font-family: "FiraCode-VF", sans-serif;
+}
+
+.markdown {
+    & h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: "FiraCode-VF", 'SweiSpringSugar-Black', sans-serif;
+    }
+}

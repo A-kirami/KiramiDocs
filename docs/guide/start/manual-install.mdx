@@ -1,0 +1,75 @@
+---
+sidebar_position: 2
+title: 手动安装
+---
+
+:::caution 注意
+在本章节中，我们假设你已了解计算机和命令行的初级知识。
+:::
+
+## 运行环境
+
+KiramiBot 运行所需的最低 Python 版本为3.10，请确保你的 Python 版本 >= 3.10.
+
+:::caution 注意
+Python 3.10 仅支持 Windows 8.1 及其后的版本，请确保你的 Windows 版本满足要求。
+:::
+
+我们强烈建议搭配虚拟环境进行开发，如果没有使用虚拟环境，请确保已经卸载可能存在的 NoneBot v1
+
+```bash
+pip uninstall nonebot
+```
+
+我们建议使用包管理器安装 KiramiBot，它们通常会创建一个虚拟环境，保证项目的独立性。
+
+:::info 提示
+本文中示例所使用的包管理器为 [pdm](https://pdm.fming.dev/)，你也可以使用 [poetry](https://python-poetry.org/) 或者其他你喜欢的包管理器。
+:::
+
+
+## 创建项目
+
+创建一个新的目录，例如 `kirami-bot`，在目录中执行以下命令，使用包管理器初始化项目：
+
+```bash
+pdm init
+```
+
+执行以下命令，安装 KiramiBot：
+
+```bash
+pdm add kiramibot
+```
+
+最后在目录中创建一个 `bot.py` 文件，内容如下：
+
+```python title="bot.py"
+from kirami import KiramiBot
+
+bot = KiramiBot()
+app = bot.asgi
+
+if __name__ == "__main__":
+    bot.run(app="__mp_main__:app")
+```
+
+## 数据库
+
+KiramiBot 使用 MongoDB 作为数据库，你还需要安装 MongoDB 才能正常运行。
+
+你可以在 [MongoDB 官网](https://www.mongodb.com/try/download/community) 下载并安装它，也可以使用 Docker 安装。
+
+## 运行项目
+
+在项目创建完成后，你可以在项目目录中使用以下命令来运行项目：
+
+```bash
+pdm run python bot.py
+```
+
+恭喜，你现在应该已经运行起来了你的第一个 KiramiBot 项目了！
+
+## 使用体验
+
+[Matcha](https://github.com/A-kirami/matcha) 是一个模拟聊天交互的辅助开发工具，你可以使用它来快速体验你的 KiramiBot 项目。

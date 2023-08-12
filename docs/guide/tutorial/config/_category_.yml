@@ -1,0 +1,6 @@
+position: 0
+label: 配置
+# collapsible: false
+link:
+  type: doc
+  id: 'guide/tutorial/config/index'
