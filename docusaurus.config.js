@@ -89,7 +89,7 @@ const config = {
             type: "custom-shop",
             position: "left",
             text: "浏览应用商店",
-            href: `/store`,
+            href: "https://github.com/A-kirami/KiramiBot",
           },
           {
             type: "docsVersionDropdown",
@@ -100,7 +100,7 @@ const config = {
                 value: '<hr class="dropdown-separator">',
               },
               {
-                to: "/versions",
+                to: "https://github.com/A-kirami/KiramiBot/releases",
                 label: "发行说明",
               },
             ],
@@ -168,32 +168,13 @@ const config = {
       return {
         name: "docusaurus-unocss",
         configurePostCss(postcssOptions) {
+          postcssOptions.plugins.push(require("postcss-nesting"));
           postcssOptions.plugins.push(require("@unocss/postcss"));
           return postcssOptions;
-        },
-      };
-    },
-  ],
-
-  webpack: {
-    jsLoader: (isServer) => {
-      return {
-        loader: require.resolve("swc-loader"),
-        options: {
-          jsc: {
-            parser: {
-              syntax: "typescript",
-              tsx: true,
-            },
-            target: "esnext",
-          },
-          module: {
-            type: isServer ? "commonjs" : "es6",
-          },
         }
       }
-    }
-  }
+    },
+  ],
 };
 
 module.exports = config;
