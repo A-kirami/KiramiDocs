@@ -2,6 +2,15 @@ name: Site Preview
 
 on:
   pull_request_target:
+    paths:
+      - "src/**"
+      - "docs/**"
+      - "static/**"
+      - "package.json"
+      - "babel.config.js"
+      - "docusaurus.config.js"
+      - "sidebars.js"
+      - "unocss.config.ts"
 
 jobs:
   preview:

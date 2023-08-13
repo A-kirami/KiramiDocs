@@ -4,6 +4,15 @@ on:
   pull_request_target:
     branches:
       - main
+    paths:
+      - "src/**"
+      - "docs/**"
+      - "static/**"
+      - "package.json"
+      - "babel.config.js"
+      - "docusaurus.config.js"
+      - "sidebars.js"
+      - "unocss.config.ts"
 
 permissions:
   contents: read

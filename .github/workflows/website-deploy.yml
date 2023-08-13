@@ -4,6 +4,15 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "src/**"
+      - "docs/**"
+      - "static/**"
+      - "package.json"
+      - "babel.config.js"
+      - "docusaurus.config.js"
+      - "sidebars.js"
+      - "unocss.config.ts"
 
 jobs:
   publish:
