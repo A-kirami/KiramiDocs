@@ -1,0 +1,27 @@
+name: Lint
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Sync node version and setup cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Yarn install
+        uses: ./.github/actions/yarn-nm-install
+        with:
+          enable-corepack: true
+
+      - name: Lint
+        run: yarn lint && yarn lint:style
+
+      - name: Prettier Code
+        run: yarn format:diff
