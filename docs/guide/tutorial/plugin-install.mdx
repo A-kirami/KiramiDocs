@@ -1,0 +1,38 @@
+---
+title: 安装插件
+---
+
+为了让项目尽可能地轻盈简洁，KiramiBot 本身并没有内置任何插件。为了让你的机器人拥有更多的功能，你需要安装插件。
+
+:::caution 注意
+KiramiBot 的商店还在建设中，目前只有少量插件可用。如果你有好的插件想要分享，请前往 [KiramiBot 插件目录](#) 提交 PR。
+:::
+
+尽管目前无法使用 KiramiBot 的插件商店，不过没关系，KiramiBot 完全兼容 NoneBot2 的插件。
+
+你可以在 [NoneBot2 插件商店](https://nonebot.dev/store) 中找到你想要的插件，然后按照文档安装即可。
+
+插件安装完成后，你需要在配置文件中添加加载插件的配置项，然后重启机器人。
+
+下面我们以 [helloworld](https://github.com/A-kirami/kirami-plugin-helloworld) 插件为例，来演示如何安装插件。
+
+1. 运行以下命令安装插件：
+
+```shell
+pdm add kirami-plugin-helloworld
+```
+
+2. 在 `kirami.config.toml` 的 `plugin` 部分添加插件名：
+
+```toml
+[plugin]
+plugins = ["kirami_plugin_helloworld"]
+```
+
+3. 重启机器人以加载插件。
+
+使用 Matcha 来测试一下插件是否安装成功吧！
+
+import Chat from '@site/src/components/Chat'
+
+<Chat chats={[{content:"hello", send:true}, {content:"world"}]} title="Matcha" />
