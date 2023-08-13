@@ -36,7 +36,7 @@ jobs:
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v2
         with:
-          publish-dir: './website/build'
+          publish-dir: './build'
           production-deploy: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: 'Deploy ${{ env.DEPLOY_NAME }}@${{ github.sha }}'
