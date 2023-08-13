@@ -34,7 +34,7 @@ const config = {
           breadcrumbs: false,
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
-          editUrl: 'https://github.com/A-kirami/KiramiDocs',
+          editUrl: 'https://github.com/A-kirami/KiramiDocs/edit/main/',
           versions: {
             current: {
               label: 'v0',
