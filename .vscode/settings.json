@@ -5,5 +5,10 @@
       "source.fixAll.stylelint": true
     }
   },
+  "[css]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.stylelint": true
+    }
+  },
   "css.lint.unknownAtRules": "ignore"
 }

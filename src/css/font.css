@@ -1,10 +1,10 @@
-@import url('/font/SweiSpringSugar-Black/style.css');
-@import url('/font/SourceHanSansCN-VF/style.css');
+@import '/font/SweiSpringSugar-Black/style.css';
+@import '/font/SourceHanSansCN-VF/style.css';
 
 @font-face {
     font-family: "FiraCode-VF";
-    src: url("/font/FiraCode-VF.woff2");
     font-weight: 300 700;
+    src: url("/font/FiraCode-VF.woff2");
     font-display: swap;
 }
 

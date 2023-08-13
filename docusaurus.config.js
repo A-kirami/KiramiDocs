@@ -2,39 +2,39 @@
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "KiramiBot",
-  tagline: "读作 Kirami，写作星见，简明轻快的聊天机器人应用",
-  favicon: "img/favicon.ico",
+  title: 'KiramiBot',
+  tagline: '读作 Kirami，写作星见，简明轻快的聊天机器人应用',
+  favicon: 'img/favicon.ico',
 
-  url: "https://docs.kiramibot.com",
-  baseUrl: "/",
+  url: 'https://docs.kiramibot.com',
+  baseUrl: '/',
 
-  organizationName: "A-kirami",
-  projectName: "KiramiBot",
+  organizationName: 'A-kirami',
+  projectName: 'KiramiBot',
 
-  onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "warn",
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'warn',
 
   i18n: {
-    defaultLocale: "zh-Hans",
-    locales: ["zh-Hans"],
+    defaultLocale: 'zh-Hans',
+    locales: ['zh-Hans'],
     localeConfigs: {
-      "zh-Hans": { label: "简体中文" },
+      'zh-Hans': { label: '简体中文' },
     },
   },
 
   presets: [
     [
-      "classic",
+      'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: require.resolve("./sidebars.js"),
+          sidebarPath: require.resolve('./sidebars.js'),
           sidebarCollapsed: false,
           breadcrumbs: false,
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
-          editUrl: "https://github.com/A-kirami/KiramiDocs",
+          editUrl: 'https://github.com/A-kirami/KiramiDocs',
           versions: {
             current: {
               label: 'v0',
@@ -42,7 +42,7 @@ const config = {
           },
         },
         theme: {
-          customCss: require.resolve("./src/css/custom.css"),
+          customCss: require.resolve('./src/css/custom.css'),
         },
       }),
     ],
@@ -54,61 +54,67 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       announcementBar: {
-        content: `⭐️ 如果你喜欢 KiramiBot, 请在 <a target="_blank" rel="noopener noreferrer" href="https://github.com/A-kirami/KiramiBot">GitHub</a> 上点亮一颗星星 ⭐️`,
+        content:
+          '⭐️ 如果你喜欢 KiramiBot, 请在 <a target="_blank" rel="noopener noreferrer" href="https://github.com/A-kirami/KiramiBot">GitHub</a> 上点亮一颗星星 ⭐️',
       },
-      metadata: [{name: 'keywords', content: 'bot, chatbot, nonebot, nonebot2, hoshino, hoshinobot, gocq, gocqhttp, qqbot, 聊天机器人, qq机器人'}],
+      metadata: [
+        {
+          name: 'keywords',
+          content: 'bot, chatbot, nonebot, nonebot2, hoshino, hoshinobot, gocq, gocqhttp, qqbot, 聊天机器人, qq机器人',
+        },
+      ],
       navbar: {
-        title: "KiramiBot",
+        title: 'KiramiBot',
         logo: {
-          alt: "KiramiBot Logo",
-          src: "img/logo.svg",
+          alt: 'KiramiBot Logo',
+          src: 'img/logo.svg',
         },
         hideOnScroll: true,
         items: [
           {
-            label: "用户指南",
-            type: "doc",
-            docId: "intro",
+            label: '用户指南',
+            type: 'doc',
+            docId: 'intro',
           },
           {
-            label: "开发手册",
-            type: "doc",
-            docId: "manual/index",
+            label: '开发手册',
+            type: 'doc',
+            docId: 'manual/index',
           },
           {
-            label: "API",
-            type: "doc",
-            docId: "api/index",
+            label: 'API',
+            type: 'doc',
+            docId: 'api/index',
           },
           {
-            label: "社区",
-            type: "doc",
-            docId: "community/index",
+            label: '社区',
+            type: 'doc',
+            docId: 'community/index',
           },
           {
-            type: "custom-shop",
-            position: "left",
-            text: "浏览应用商店",
-            href: "https://github.com/A-kirami/KiramiBot",
+            type: 'custom-shop',
+            position: 'left',
+            text: '浏览应用商店',
+            href: 'https://github.com/A-kirami/KiramiBot',
           },
           {
-            type: "docsVersionDropdown",
-            position: "right",
+            type: 'docsVersionDropdown',
+            position: 'right',
             dropdownItemsAfter: [
               {
                 type: 'html',
                 value: '<hr class="dropdown-separator">',
               },
               {
-                to: "https://github.com/A-kirami/KiramiBot/releases",
-                label: "发行说明",
+                to: 'https://github.com/A-kirami/KiramiBot/releases',
+                label: '发行说明',
               },
             ],
             dropdownActiveClassDisabled: true,
           },
           {
-            type: "search",
-            position: "right",
+            type: 'search',
+            position: 'right',
           },
           {
             type: 'html',
@@ -116,16 +122,16 @@ const config = {
             value: '<div class="navbar-separator"></div>',
           },
           {
-            type: "custom-sponsor",
-            position: "right",
-            text: "赞助支持",
-            href: "https://afdian.net/a/kiramibot",
+            type: 'custom-sponsor',
+            position: 'right',
+            text: '赞助支持',
+            href: 'https://afdian.net/a/kiramibot',
           },
           {
-            href: "https://github.com/A-kirami/KiramiBot",
-            position: "right",
-            className: "header-github-link",
-            "aria-label": "GitHub repository",
+            href: 'https://github.com/A-kirami/KiramiBot',
+            position: 'right',
+            className: 'header-github-link',
+            'aria-label': 'GitHub repository',
           },
         ],
       },
@@ -166,15 +172,15 @@ const config = {
   plugins: [
     async function unocssPlugin() {
       return {
-        name: "docusaurus-unocss",
+        name: 'docusaurus-unocss',
         configurePostCss(postcssOptions) {
-          postcssOptions.plugins.push(require("postcss-nesting"));
-          postcssOptions.plugins.push(require("@unocss/postcss"));
-          return postcssOptions;
-        }
+          postcssOptions.plugins.push(require('postcss-nesting'))
+          postcssOptions.plugins.push(require('@unocss/postcss'))
+          return postcssOptions
+        },
       }
     },
   ],
-};
+}
 
-module.exports = config;
+module.exports = config

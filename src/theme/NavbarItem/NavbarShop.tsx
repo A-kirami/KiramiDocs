@@ -1,8 +1,14 @@
-import clsx from 'clsx';
-import React from 'react';
-import Link from '@docusaurus/Link';
+import Link from '@docusaurus/Link'
+import clsx from 'clsx'
 
-export default function NavbarShop({ text, href, mobile, ...props }): JSX.Element {
+interface NavbarShopProps {
+  position: 'left' | 'right'
+  text: string
+  href: string
+  className?: string
+}
+
+export default function NavbarShop({ text, href, ...props }: NavbarShopProps): JSX.Element {
   return (
     <Link className={clsx(props.className, 'navbar-shop', 'navbar-cta')} to={href} {...props}>
       <span>{text}</span>
@@ -18,5 +24,5 @@ export default function NavbarShop({ text, href, mobile, ...props }): JSX.Elemen
         />
       </svg>
     </Link>
-  );
+  )
 }
