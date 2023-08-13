@@ -20,6 +20,10 @@
 
 如果你需要编辑器检查 Markdown 规范，可以在 VSCode 中安装 [markdownlint] 扩展。
 
+## 代码空间
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=677594368)
+
 ## 本地开发
 
 通过运行以下命令安装依赖项：
@@ -39,10 +43,6 @@ yarn start
 ```shell
 yarn build
 ```
-
-## 代码空间
-
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=677594368)
 
 ## 持续集成（CI）
 
