@@ -110,7 +110,8 @@
       }
     ],
     "import/newline-after-import": ["warn", { "considerComments": true }],
-    "import/no-named-as-default": "off"
+    "import/no-named-as-default": "off",
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }]
   },
   "settings": {
     "react": {
