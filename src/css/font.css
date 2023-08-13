@@ -2,28 +2,28 @@
 @import '/font/SourceHanSansCN-VF/style.css';
 
 @font-face {
-    font-family: "FiraCode-VF";
-    font-weight: 300 700;
-    src: url("/font/FiraCode-VF.woff2");
-    font-display: swap;
+  font-family: "FiraCode-VF";
+  font-weight: 300 700;
+  src: url("/font/FiraCode-VF.woff2");
+  font-display: swap;
 }
 
 body {
-    font-family: "SourceHanSansCN-VF", sans-serif;
+  font-family: "SourceHanSansCN-VF", sans-serif;
 }
 
 pre,
 code {
-    font-family: "FiraCode-VF", sans-serif;
+  font-family: "FiraCode-VF", sans-serif;
 }
 
 .markdown {
-    & h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        font-family: "FiraCode-VF", 'SweiSpringSugar-Black', sans-serif;
-    }
+  & h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "FiraCode-VF", 'SweiSpringSugar-Black', sans-serif;
+  }
 }
