@@ -151,13 +151,6 @@ html {
     @apply text-lg;
   }
 
-  & h2+h3,
-  h3+h4,
-  h4+h5,
-  h5+h6 {
-    @apply ms-4;
-  }
-
   & li>p {
     @apply mb-0;
   }
@@ -908,4 +901,26 @@ div[class^="announcementBar_"] {
 .heading-line-third::before {
   content: "聊天机器人应用";
   animation: third_heading_white_text 10s infinite;
+}
+
+/* -------------------------------------------------------------------------- */
+
+/*                                 Admonitions                                */
+
+/* -------------------------------------------------------------------------- */
+
+.alert a {
+  @apply relative z-1 inline-block h-6 px-2px mx-2px text-[var(--ifm-alert-foreground-color)] no-underline cursor-pointer bg-inherit border-none outline-none;
+
+  &::before {
+    @apply absolute top-110% left-1/2 z--1 w-full h-3px content-empty bg-[var(--ifm-alert-border-color)] rounded-5px transition-all duration-300 transform translate-x--50% translate-y--50%;
+  }
+
+  &:hover {
+    @apply text-white;
+
+    &::before {
+      @apply top-70% w-full h-inherit;
+    }
+  }
 }

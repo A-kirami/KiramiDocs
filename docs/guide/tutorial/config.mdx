@@ -1,0 +1,353 @@
+---
+sidebar_position: 0
+title: 配置
+---
+
+<div className="intro">
+
+为了减轻用户的配置压力，我们为大多数配置提供了**合理的默认值**。
+
+尽管你可以直接使用，但这可能会为你的机器人带来一些限制，为了更好地自定义你的机器人，建议你根据自身情况修改。
+
+</div>
+
+## 配置文件
+
+KiramiBot 支持三种格式的配置文件：toml、yaml 和 json。我们建议使用 toml 格式的配置文件，你也可以根据个人偏好选择其中之一。
+
+配置文件需位于项目根目录下，通常文件名为 `kirami` 或者 `kirami.config`，后缀分别为 `toml`、`yaml` 或者 `json`。
+
+配置文件的优先级顺序为：
+1. `kirami.toml`
+2. `kirami.config.toml`
+3. `kirami.yaml`
+4. `kirami.config.yaml`
+5. `kirami.json`
+6. `kirami.config.json`
+
+如果以上文件都不存在，KiramiBot 会尝试从 `pyproject.toml` 的 `tool.kirami` 配置中读取。
+
+:::info 提示
+KiramiBot 同时还兼容 NoneBot2 的 [dotenv 配置文件](https://nonebot.dev/docs/appendices/config#dotenv-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6)，你可以使用它来传递部分配置。
+:::
+
+## 配置项
+
+### Bot
+
+Bot 主要配置。这部分的配置支持通过 dotenv 配置文件或者环境变量传递。
+
+#### host
+
+- 类型: `str`
+- 默认值: `127.0.0.1`
+
+KiramiBot 的 HTTP 和 WebSocket 服务端监听的 IP/主机名。
+
+#### port
+
+- 类型: `int`
+- 默认值: `8120`
+
+KiramiBot 的 HTTP 和 WebSocket 服务端监听的端口。
+
+#### debug
+
+- 类型: `bool`
+- 默认值: `False`
+
+是否以调试模式运行 KiramiBot。
+
+#### log_level
+
+- 类型: `LevelName | int`
+- 默认值: `INFO`
+
+配置 KiramiBot 日志输出等级，可以为 `int` 类型等级或等级名称，参考 [loguru 日志等级](https://loguru.readthedocs.io/en/stable/api/logger.html#levels)。
+
+#### log_file
+
+- 类型: `LevelName | tuple[LevelName]`
+- 默认值: `ERROR`
+
+KiramiBot 的日志保存等级，必须为等级名称。如果为 `LevelName` 类型，则保存指定等级及以上的日志。如果为 `tuple[LevelName]` 类型，则保存指定等级的日志。
+
+#### api_timeout
+
+- 类型: `float`
+- 默认值: `30.0`
+
+API 请求超时时间，单位: 秒。
+
+#### access_token
+
+- 类型: `str | None`
+- 默认值: `None`
+
+API 请求以及上报所需密钥，在请求头中携带。
+
+#### superusers
+
+- 类型: `set[str]`
+- 默认值: `set()`
+
+机器人超级用户。
+
+#### nickname
+
+- 类型: `set[str]`
+- 默认值: `{"kirami", "星见"}`
+
+机器人昵称，根据用户是否 @bot 或者是否以机器人昵称开头来判断是否是向机器人发送的消息。
+
+#### command_start
+
+- 类型: `set[str]`
+- 默认值: `{"/", ""}`
+
+命令的起始标记，用于判断一条消息是不是命令。**仅适用于命令事件响应器。**
+
+#### command_sep
+
+- 类型: `set[str]`
+- 默认值: `{"."}`
+
+命令的分隔标记，用于将文本形式的命令切分为元组（实际的命令名）。**仅适用于命令事件响应器。**
+
+#### session_expire_timeout
+
+- 类型: `timedelta`
+- 默认值: `timedelta(minutes=2)`
+
+等待用户回复的超时时间。
+
+#### proxy_url
+
+- 类型: `str | dict[str, str] | None`
+- 默认值: `None`
+
+HTTP 代理地址。
+
+#### http_timeout
+
+- 类型: `float`
+- 默认值: `10.0`
+
+HTTP 请求超时时间，单位: 秒。
+
+#### browser
+
+- 类型: `Literal["chromium", "firefox", "webkit"]`
+- 默认值: `"chromium"`
+
+浏览器类型。
+
+### Plugin
+
+插件加载配置。
+
+#### plugins
+
+- 类型: `set[str]`
+- 默认值: `set()`
+
+加载的插件列表。
+
+#### plugin_dirs
+
+- 类型: `set[str]`
+- 默认值: `set()`
+
+插件目录列表。
+
+#### whitelist
+
+- 类型: `set[str] | None`
+- 默认值: `None`
+
+插件白名单，仅加载白名单中的插件。
+
+#### blacklist
+
+- 类型: `set[str] | None`
+- 默认值: `None`
+
+插件黑名单，不加载黑名单中的插件。
+
+### Log
+
+日志配置。
+
+#### log_expire_timeout
+
+- 类型: `int`
+- 默认值: `7`
+
+日志文件过期时间，单位: 天。
+
+### Database
+
+MongoDB 数据库配置。
+
+#### uri
+
+- 类型: `str`
+- 默认值: `mongodb://localhost:27017`
+
+MongoDB 数据库连接 URI。可通过环境变量 `MANGO_URI` 传递。
+
+#### host
+
+- 类型: `str`
+- 默认值: `127.0.0.1`
+
+MongoDB 数据库主机。
+
+#### port
+
+- 类型: `int`
+- 默认值: `27017`
+
+MongoDB 数据库端口。
+
+#### username
+
+- 类型: `str`
+- 默认值: `""`
+
+MongoDB 数据库用户名。
+
+#### password
+
+- 类型: `str`
+- 默认值: `""`
+
+MongoDB 数据库密码。
+
+#### database
+
+- 类型: `str`
+- 默认值: `kirami`
+
+MongoDB 数据库名称。
+
+### Server
+
+网络服务配置。
+
+#### allow_cors
+
+- 类型: `bool`
+- 默认值: `True`
+
+是否允许跨域请求。
+
+#### allow_origins
+
+- 类型: `list[str]`
+- 默认值: `["*"]`
+
+允许跨域请求的源列表。
+
+#### allow_origin_regex
+
+- 类型: `str | None`
+- 默认值: `None`
+
+正则表达式字符串，匹配的源允许跨域请求。
+
+#### allow_methods
+
+- 类型: `list[str]`
+- 默认值: `["*"]`
+
+允许跨域请求的 HTTP 方法列表。
+
+#### allow_headers
+
+- 类型: `list[str]`
+- 默认值: `["*"]`
+
+允许跨域请求的 HTTP 请求头列表。
+
+#### allow_credentials
+
+- 类型: `bool`
+- 默认值: `False`
+
+指示跨域请求支持 cookies。另外，允许凭证时 `allow_origins` 不能设定为 ['*']，必须指定源。
+
+#### expose_headers
+
+- 类型: `list[str]`
+- 默认值: `[]`
+
+指示可以被浏览器访问的响应头。
+
+#### max_age
+
+- 类型: `int`
+- 默认值: `600`
+
+设定浏览器缓存 CORS 响应的最长时间，单位: 秒。
+
+## 配置示例
+
+
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeBlock from '@theme/CodeBlock';
+
+<Tabs>
+<TabItem value="toml" label="toml" default>
+
+```toml title="kirami.config.toml"
+[bot]
+host="127.0.0.1"
+port=8120
+http_timeout=30
+[plugin]
+plugin_dirs=["plugins"]
+[log]
+log_expire_timeout=14
+```
+
+</TabItem>
+<TabItem value="yaml" label="yaml" title="kirami.config.yaml">
+
+```yaml title="kirami.config.yaml"
+bot:
+  host: 127.0.0.1
+  port: 8120
+  http_timeout: 30
+plugin:
+  plugin_dirs:
+    - plugins
+log:
+  log_expire_timeout: 14
+```
+
+</TabItem>
+<TabItem value="json" label="json" title="kirami.config.json">
+
+```json title="kirami.config.json"
+{
+  "bot": {
+    "host": "127.0.0.1",
+    "port": 8120,
+    "http_timeout": 30
+  },
+  "plugin": {
+    "plugin_dirs": [
+      "plugins"
+    ]
+  },
+  "log": {
+    "log_expire_timeout": 14
+  }
+}
+```
+
+</TabItem>
+</Tabs>

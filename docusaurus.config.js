@@ -137,6 +137,7 @@ const config = {
       },
       prism: {
         theme: { plain: {}, styles: [] },
+        additionalLanguages: ['toml'],
       },
       colorMode: {
         respectPrefersColorScheme: true,
