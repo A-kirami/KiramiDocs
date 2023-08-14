@@ -38,7 +38,7 @@ function ChatMessage({ send = false, content }: ChatMessageProps): JSX.Element {
 
 export default function Chat({ chats, title }: { chats: ChatMessageProps[]; title?: string }): JSX.Element {
   return (
-    <div className="mbe-5 overflow-hidden">
+    <div className="mbe-5 overflow-hidden rounded-1.6">
       {title && (
         <div className="h-11 flex items-center justify-center bg-blue-400 text-xl text-white dark:bg-slate-300 dark:text-slate-700">
           {title}
