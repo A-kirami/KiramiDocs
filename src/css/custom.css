@@ -21,7 +21,7 @@
   --ifm-color-primary-lighter: hsl(214deg 94% 74%);
   --ifm-color-primary-lightest: hsl(215deg 95% 84%);
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgb(0 0 0 / 10%);
+  --docusaurus-highlighted-code-line-bg: hsl(220deg 50% 94%);
   --ifm-font-weight-semibold: 400;
   --ifm-toc-padding-vertical: 0;
   --ifm-link-hover-decoration: none;
@@ -48,7 +48,7 @@
   --ifm-color-primary-light: hsl(196deg 100% 56%);
   --ifm-color-primary-lighter: hsl(196deg 100% 59%);
   --ifm-color-primary-lightest: hsl(196deg 100% 66%);
-  --docusaurus-highlighted-code-line-bg: rgb(0 0 0 / 30%);
+  --docusaurus-highlighted-code-line-bg: hsl(223deg 20% 24%);
 }
 
 html[data-theme='dark'] {
