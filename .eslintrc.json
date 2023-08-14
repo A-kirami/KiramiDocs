@@ -13,6 +13,7 @@
     "plugin:import/typescript",
     "plugin:@typescript-eslint/recommended",
     "plugin:promise/recommended",
+    "plugin:mdx/recommended",
     "plugin:prettier/recommended",
     "@unocss"
   ],
@@ -124,6 +125,7 @@
       "typescript": {
         "alwaysTryTypes": true
       }
-    }
+    },
+    "mdx/code-blocks": true
   }
 }

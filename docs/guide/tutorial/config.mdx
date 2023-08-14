@@ -18,6 +18,7 @@ KiramiBot 支持三种格式的配置文件：toml、yaml 和 json。我们建�
 配置文件需位于项目根目录下，通常文件名为 `kirami` 或者 `kirami.config`，后缀分别为 `toml`、`yaml` 或者 `json`。
 
 配置文件的优先级顺序为：
+
 1. `kirami.toml`
 2. `kirami.config.toml`
 3. `kirami.yaml`
@@ -293,8 +294,8 @@ MongoDB 数据库名称。
 
 ## 配置示例
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import TabItem from '@theme/TabItem'
+import Tabs from '@theme/Tabs'
 
 <Tabs>
 <TabItem value="toml" label="toml">
@@ -336,9 +337,7 @@ log:
     "http_timeout": 30
   },
   "plugin": {
-    "plugin_dirs": [
-      "plugins"
-    ]
+    "plugin_dirs": ["plugins"]
   },
   "log": {
     "log_expire_timeout": 14

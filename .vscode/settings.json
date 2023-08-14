@@ -1,5 +1,5 @@
 {
-  "[vue][svelte][javascript][typescript][typescriptreact][javascriptreact]": {
+  "[javascript][typescript][typescriptreact][javascriptreact][markdown][mdx]": {
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": true,
       "source.fixAll.stylelint": true
@@ -10,5 +10,6 @@
       "source.fixAll.stylelint": true
     }
   },
-  "css.lint.unknownAtRules": "ignore"
+  "css.lint.unknownAtRules": "ignore",
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "html", "markdown", "mdx"]
 }
