@@ -1,0 +1,125 @@
+---
+title: 认识插件
+---
+
+在正式开始编写插件之前，我们首先需要了解插件的基本概念。
+
+## 插件结构
+
+在 KiramiBot 中，插件实际上是一个 Python [模块（module）](https://docs.python.org/zh-cn/3/glossary.html#term-module)，经过 KiramiBot 特殊处理后变成了一个可用的插件。为了保持插件的整洁和独立性，我们建议插件之间尽量减少耦合，避免相互调用。
+
+### 单文件插件
+
+一个普通的 `.py` 文件即可以作为一个插件，例如创建一个 `foo.py` 文件：
+
+```tree title=Project
+📂 plugins
+└── 📄 foo.py
+```
+
+在这个例子中，模块 `foo` 已经可以被称为一个插件了，尽管它还什么都没做。
+
+### 包插件
+
+一个包含 `__init__.py` 文件的文件夹也可以作为插件，这是一个常规的 Python [包（package）](https://docs.python.org/zh-cn/3/glossary.html#term-regular-package)。
+
+比如，你可以创建一个名为 `foo` 的文件夹：
+
+```tree title=Project
+📂 plugins
+└── 📂 foo
+    └── 📄 __init__.py
+```
+
+在这种情况下，包 `foo` 同样是一个合法的插件，插件内容可以在写在 `__init__.py` 文件中。
+
+## 创建插件
+
+首先，在项目的根目录下创建一个名为 `plugins` 的文件夹，用来存放接下来要编写的插件。
+
+项目结构现在看起来是这样的：
+
+```tree title=Project
+📦 kirami-bot
+│── 📂 plugins
+├── 📄 pyproject.toml
+└── 📄 kirami.config.toml
+```
+
+接着，在 `plugins` 文件夹中，我们创建一个名为 `helloworld` 的文件夹，用来存放我们的第一个插件。
+
+项目结构变为：
+
+```tree title=Project
+📦 kirami-bot
+│── 📂 plugins
+|   └── 📂 helloworld
+|       └── 📄 __init__.py
+├── 📄 pyproject.toml
+└── 📄 kirami.config.toml
+```
+
+现在，你已经创建了插件的基本结构，并准备好开始编写你的第一个 KiramiBot 插件。
+
+将下面的代码复制到 `plugins/helloworld/__init__.py` 文件中：
+
+```python title=plugins/helloworld/__init__.py
+from kirami import on_fullmatch
+from kirami.typing import Event, Matcher
+
+@on_fullmatch("hello", ignorecase=True)
+async def _(matcher: Matcher, event: Event):
+    await matcher.finish("world")
+```
+
+目前，你可以暂时不用担心代码的含义，因为在后续的章节中我们会详细介绍这段代码的功能和作用。
+
+## 加载插件
+
+创建了插件的基本结构后，接下来我们需要了解如何在 KiramiBot 中加载这些插件。
+
+:::caution 注意
+加载的插件模块名称（插件文件名或文件夹名）不能相同，且每一个插件只能被加载一次，重复加载将会导致异常。
+:::
+
+### 加载单个插件
+
+修改根目录下的 `kirami.config.toml` 文件，在 `plugin` 部分的 `plugins` 字段添加插件的路径：
+
+```toml title=kirami.config.toml
+[plugin]
+plugins=["plugins.helloworld"]
+```
+
+在上述配置中，我们将 `plugins.helloworld` 添加到了 `plugins` 中，这会加载指定的插件，通常用于加载第三方插件或者项目插件。
+
+:::caution 注意
+本地项目插件需要通过点分割模块名称，例如 `plugins.helloworld`，而不是 `plugins/helloworld`。
+:::
+
+### 加载插件目录
+
+修改根目录下的 `kirami.config.toml` 文件，在 `plugin` 部分的 `plugin_dirs` 字段添加插件文件夹的路径：
+
+```toml title=kirami.config.toml
+[plugin]
+plugin_dirs=["plugins"]
+```
+
+在上述配置中，我们将 `plugins` 文件夹添加到了 `plugin_dirs` 中，这会加载文件夹中的所有插件，通常用于加载一系列本地编写的项目插件。
+
+## 测试插件
+
+最后，我们需要启动 KiramiBot 并测试刚刚编写的插件。
+
+:::info 提示
+你可以使用 [Matcha](https://github.com/A-kirami/matcha) 来测试插件的功能。
+:::
+
+import Chat from '@site/src/components/Chat'
+
+<Chat chats={[{ content: 'hello', send: true }, { content: 'world' }]} title="Matcha" />
+
+尝试发送 `hello`，你会得到 `world` 的回复，这说明你的插件已经成功加载并运行了。
+
+在接下来的章节中，我们将继续探索插件的更多特性，以及如何利用这些特性为你的 KiramiBot 插件添加更多功能。

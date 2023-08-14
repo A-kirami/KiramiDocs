@@ -1,0 +1,62 @@
+---
+sidebar_position: 0
+title: 准备工作
+---
+
+<div className="intro">
+
+在开始 KiramiBot 插件开发之前，确保你已经具备了一些必要的基础知识和工具。本节将为你提供所需的准备步骤，帮助你为开发插件做好充分准备。
+
+现在，让我们一步步地进行准备工作，为顺利的 KiramiBot 插件开发做好准备！
+
+</div>
+
+:::caution 注意
+在官方开发手册中，我们假设你已掌握了 [Python](https://docs.python.org/zh-cn/) 的初级知识，并且对 [asyncio](https://docs.python.org/zh-cn/3/library/asyncio.html) 有基本的了解。
+如果你刚开始学习 Python，将 KiramiBot 插件开发作为你的第一步并不是一个好主意，掌握好基础知识再来吧！
+:::
+
+## 选择编辑器
+
+在开发 KiramiBot 插件之前，你需要选择一个适合你的代码编辑器。虽然你可以根据个人偏好选择任何编辑器，但我们提供以下建议供你参考：
+
+- **Visual Studio Code（推荐）**: Visual Studio Code 是一款受欢迎的轻量级代码编辑器，拥有强大的社区支持和丰富的扩展插件。它适用于多种编程语言，包括 Python，而且可以根据你的需求进行定制。你可以从 [VS Code官网](https://code.visualstudio.com/) 下载并安装。
+
+- **PyCharm**: PyCharm 是一款由 JetBrains 开发的 Python 专用集成开发环境（IDE）。它提供了强大的 Python 支持、智能代码补全、调试功能以及丰富的插件生态系统。如果你已经熟悉 PyCharm 或者喜欢全功能的 IDE，PyCharm 是一个优秀的选择。你可以从 [PyCharm官网](https://www.jetbrains.com/pycharm/) 下载并安装。
+
+- **其他编辑器**: 如果你已经熟悉并且偏好使用其他代码编辑器，完全可以继续使用。无论你选择哪个编辑器，确保它能满足你的开发需求，并且你感觉舒适方便使用即可。
+
+请根据你的情况，选择一个适合你的编辑器，然后进行插件开发的准备工作。接下来，我们将介绍其他一些重要的准备步骤。
+
+<details>
+
+<summary>如果你选择的是 Visual Studio Code，这里有一些推荐的配置</summary>
+
+1. 在 VSCode 插件视图搜索并安装 [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) 和 [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance) 插件。
+
+2. 在项目的 `.vscode` 文件夹中创建 `settings.json` 并添加以下内容：
+
+```json title="settings.json"
+{
+  "python.languageServer": "Pylance",
+  "python.analysis.typeCheckingMode": "basic"
+}
+```
+
+</details>
+
+## 完善基础知识
+
+在开始 KiramiBot 插件开发之前，确保你已经具备了一些必要的基础知识。尤其是对于 Python 编程语言和 asyncio 库的基本了解。虽然我们不会在这里提供完整的教程，但你需要熟悉以下概念：
+
+- **Python 语法**: 了解 Python 的基本语法，包括变量、数据类型、条件语句、循环和函数等。这将是你编写插件代码的基础。
+
+- **asyncio 异步编程**: 插件开发中，很多操作需要异步处理，而 asyncio 是 Python 中用于异步编程的库。了解异步编程的概念、异步函数的定义和使用，以及协程等内容将有助于你更好地编写插件。
+
+- **类型注解**: Python 3.5+ 引入了类型注解的功能，这有助于提高代码的可读性和可维护性。在插件开发中，类型注解不仅有助于减少错误，还和后续的重要功能密切相关。
+
+如果你对这些概念还不熟悉，我们建议你先学习基础的 Python 编程、asyncio 异步编程和类型注解知识。这将为你后续的插件开发奠定坚实的基础。
+
+在你准备好了这些基础知识后，你将更加自信和顺利地进入 KiramiBot 插件开发的世界。
+
+你已经完成了准备工作的所有步骤，下一步，我们将深入了解插件的具体开发流程，以及如何与 KiramiBot 进行集成。
