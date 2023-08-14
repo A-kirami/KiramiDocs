@@ -1,0 +1,360 @@
+---
+title: 事件响应器
+---
+
+<div className="intro">
+
+事件响应器（Matcher）是用于对接收到的事件进行响应的重要工具。通过定义简单的规则，事件响应器可以帮助你捕获特定类型的事件，并执行相应的操作。
+
+在插件开发中，事件响应器是用来捕获并处理特定类型的事件的工具。它会检查事件是否满足一些条件，如果满足，就会触发预先定义的操作。这是插件与用户交互的基础。
+
+接下来，我们将逐步介绍如何创建一个基本的事件响应器，并让你更好地理解它的作用。让我们开始吧！
+
+</div>
+
+## 事件响应器辅助函数
+
+在 KiramiBot 中，我们提供了许多方便的工具，称为“事件响应器辅助函数”，来帮助你更轻松地创建事件响应器。这些辅助函数不仅简化了代码编写的过程，还提高了代码的可读性。
+
+你可以直接从 `kirami` 模块中导入并使用这些辅助函数，它们能帮助你简单地创建不同类型的事件响应器，而无需手动编写复杂的代码。
+
+接下来，我们将详细介绍这些辅助函数，并展示如何使用它们来创建你所需的事件响应器。无论你是否有编程经验，这些工具都能够帮助你更轻松地开发插件，让你专注于功能实现而不是纠结于代码细节。
+
+## 创建事件响应器
+
+在上一节中，我们创建了一个简单的插件，现在让我们将与事件响应器相关的代码提取出来：
+
+```python {1,3} showLineNumbers
+from kirami import on_fullmatch
+
+hello = on_fullmatch("hello")
+```
+
+让我们分析一下这段代码做了什么：
+
+- 在第 1 行，我们使用 `from kirami import on_fullmatch` 导入了一个名为 `on_fullmatch` 的辅助函数，这个函数帮助我们创建一个完全匹配消息的事件响应器。
+
+- 在第 3 行，我们使用 `on_fullmatch("hello")` 创建了一个名为 `hello` 的事件响应器。括号中的字符串 `"hello"` 是我们希望响应的消息内容。
+
+这个事件响应器会检查接收到的消息是否完全匹配 `"hello"`，如果匹配，就会执行预先定义的操作。
+
+### 为事件响应器添加参数
+
+在辅助函数中，我们可以添加一些参数来对事件响应器进行更加精细的调整，例如事件响应器的优先级、匹配规则等。例如：
+
+```python {3} showLineNumbers
+from kirami import on_fullmatch
+
+hello = on_fullmatch("hello", "你好", to_me=True)
+```
+
+这样，我们就获得了一个可以响应 `hello` 和`你好`两个命令，同时需要私聊或在消息中 @bot 时才会响应的事件响应器。
+
+:::info 提示
+需要注意的是，不同的辅助函数有不同的可选参数。在使用辅助函数之前，您可以参考编辑器的提示，了解不同函数的可选参数。
+:::
+
+## 常用辅助函数
+
+通过导入不同的辅助函数，你可以轻松创建不同类型的事件响应器。接下来，我们将介绍一些常用的辅助函数，让你更好地掌握它们的用法。
+
+:::tip 提示
+你可以在你的插件中添加下面的示例代码，亲身体验一下这些辅助函数的用法。
+:::
+
+import Chat from '@site/src/components/Chat'
+
+### on_message
+
+`on_message` 是一个消息事件响应器，它会响应所有消息事件。
+
+```python
+from kirami import on_message
+from kirami.typing import Matcher
+
+@on_message()
+async def _(matcher: Matcher):
+    await matcher.finish("on_message!")
+```
+
+### on_notice
+
+`on_notice` 是一个通知事件响应器，它会响应所有通知事件。
+
+```python
+from kirami import on_notice
+from kirami.typing import Matcher
+
+@on_notice()
+async def _(matcher: Matcher):
+    await matcher.finish("on_notice!")
+```
+
+### on_request
+
+`on_request` 是一个请求事件响应器，它会响应所有请求事件。
+
+```python
+from kirami import on_request
+from kirami.typing import Matcher
+
+@on_request()
+async def _(matcher: Matcher):
+    await matcher.finish("on_request!")
+```
+
+### on_command
+
+`on_command` 是一个消息事件响应器，它会响应所有以指定命令开头的消息事件。
+
+:::caution 注意
+`on_command` 受到配置项中的 [`command_start`](../../guide/tutorial/config#command_start) 的影响，需要在命令前额外加上 `command_start` 才能触发响应。
+
+默认配置下，`on_command` 只会对以 `/` 和空命令头开头的消息事件进行响应。
+:::
+
+```python
+from kirami import on_command
+from kirami.typing import Matcher
+
+# 响应所有以 "command" 开头的消息事件
+@on_command("command")
+async def _(matcher: Matcher):
+    await matcher.finish("on_command!")
+```
+
+<Chat
+  chats={[
+    { content: 'command', send: true },
+    { content: 'on_command!' },
+    { content: 'command xxx', send: true },
+    { content: 'on_command!' },
+    { content: '/command', send: true },
+    { content: 'on_command!' },
+    { content: '/command xxx', send: true },
+    { content: 'on_command!' },
+  ]}
+  title="on_command"
+/>
+
+### on_shell_command
+
+`on_shell_command` 是一个消息事件响应器，它会响应所有以指定命令开头的消息事件，并且支持 `shell_like` 解析参数。
+
+`ArgumentParser` 参考文档: [argparse](https://docs.python.org/3/library/argparse.html)
+
+:::caution 注意
+`on_shell_command` 受到配置项中的 [`command_start`](../../guide/tutorial/config#command_start) 的影响，需要在命令前额外加上 `command_start` 才能触发响应。
+
+默认配置下，`on_shell_command` 只会对以 `/` 和空命令头开头的消息事件进行响应。
+:::
+
+```python
+from kirami import on_shell_command
+from kirami.rule import ArgumentParser
+from kirami.typing import Matcher
+
+# 创建一个参数解析器
+parser = ArgumentParser()
+parser.add_argument("arg", type=str, help="arg help")
+
+# 响应所有以 "shell" 开头的消息事件
+@on_shell_command("shell", parser=parser)
+async def _(matcher: Matcher):
+    await matcher.finish("on_shell_command!")
+```
+
+<Chat
+  chats={[
+    { content: 'shell', send: true },
+    { content: 'on_shell_command!' },
+    { content: 'shell xxx', send: true },
+    { content: 'on_shell_command!' },
+  ]}
+  title="on_shell_command"
+/>
+
+### on_startswith
+
+`on_startswith` 是一个消息事件响应器，它会响应所有以指定内容开头的消息事件。
+
+```python
+from kirami import on_startswith
+from kirami.typing import Matcher
+
+# 响应所有以 "start" 开头的消息事件
+@on_startswith("start")
+async def _(matcher: Matcher):
+    await matcher.finish("on_startswith!")
+```
+
+<Chat
+  chats={[
+    { content: 'start', send: true },
+    { content: 'on_startswith!' },
+    { content: 'startxxx', send: true },
+    { content: 'on_startswith!' },
+  ]}
+  title="on_startswith"
+/>
+
+### on_endswith
+
+`on_endswith` 是一个消息事件响应器，它会响应所有以指定内容结尾的消息事件。
+
+```python
+from kirami import on_endswith
+from kirami.typing import Matcher
+
+# 响应所有以 "end" 结尾的消息事件
+@on_endswith("end")
+async def _(matcher: Matcher):
+    await matcher.finish("on_endswith!")
+```
+
+<Chat
+  chats={[
+    { content: 'end', send: true },
+    { content: 'on_endswith!' },
+    { content: 'xxxend', send: true },
+    { content: 'on_endswith!' },
+  ]}
+  title="on_endswith"
+/>
+
+### on_fullmatch
+
+`on_fullmatch` 是一个消息事件响应器，它会响应所有与指定内容完全一致的消息事件。
+
+```python
+from kirami import on_fullmatch
+from kirami.typing import Matcher
+
+# 响应所有完全匹配 "full" 的消息事件
+@on_fullmatch("full")
+async def _(matcher: Matcher):
+    await matcher.finish("on_fullmatch!")
+```
+
+<Chat chats={[{ content: 'full', send: true }, { content: 'on_fullmatch!' }]} title="on_fullmatch" />
+
+### on_keyword
+
+`on_keyword` 是一个消息事件响应器，它会响应所有包含指定内容的消息事件。
+
+```python
+from kirami import on_keyword
+from kirami.typing import Matcher
+
+# 响应所有包含 "key" 的消息事件
+@on_keyword("key")
+async def _(matcher: Matcher):
+    await matcher.finish("on_keyword!")
+```
+
+<Chat
+  chats={[
+    { content: 'key', send: true },
+    { content: 'on_keyword!' },
+    { content: 'xxxkeyxxx', send: true },
+    { content: 'on_keyword!' },
+  ]}
+  title="on_keyword"
+/>
+
+### on_regex
+
+`on_regex` 是一个消息事件响应器，它会响应所有匹配指定正则表达式的消息事件。
+
+```python
+from kirami import on_regex
+from kirami.typing import Matcher
+
+# 响应所有匹配 "regex" 的消息事件
+@on_regex(r"regex")
+async def _(matcher: Matcher):
+    await matcher.finish("on_regex!")
+```
+
+<Chat
+  chats={[
+    { content: 'regex', send: true },
+    { content: 'on_regex!' },
+    { content: 'xxxregexxxx', send: true },
+    { content: 'on_regex!' },
+  ]}
+  title="on_regex"
+/>
+
+### on_prefix
+
+`on_prefix` 是一个消息事件响应器，它会响应所有以指定内容开头的消息事件。
+
+:::info 提示
+与普通的 `on_startswith` 不同的是，`on_prefix` 会将前缀从消息中去除。
+:::
+
+```python
+from kirami import on_prefix
+from kirami.typing import Matcher
+
+# 响应所有以 "prefix" 开头的消息事件
+@on_prefix("prefix")
+async def _(matcher: Matcher):
+    await matcher.finish("on_prefix!")
+```
+
+<Chat
+  chats={[
+    { content: 'prefix', send: true },
+    { content: 'on_prefix!' },
+    { content: 'prefixxxx', send: true },
+    { content: 'on_prefix!' },
+  ]}
+  title="on_prefix"
+/>
+
+### on_suffix
+
+`on_suffix` 是一个消息事件响应器，它会响应所有以指定内容结尾的消息事件。
+
+:::info 提示
+与普通的 `on_endswith` 不同的是，`on_suffix` 会将后缀从消息中去除。
+:::
+
+```python
+from kirami import on_suffix
+from kirami.typing import Matcher
+
+# 响应所有以 "suffix" 结尾的消息事件
+@on_suffix("suffix")
+async def _(matcher: Matcher):
+    await matcher.finish("on_suffix!")
+```
+
+<Chat
+  chats={[
+    { content: 'suffix', send: true },
+    { content: 'on_suffix!' },
+    { content: 'xxxsuffix', send: true },
+    { content: 'on_suffix!' },
+  ]}
+  title="on_suffix"
+/>
+
+### on_time
+
+`on_time` 是一个定时事件响应器，它会在指定时间到达时响应。
+
+:::caution 注意
+`on_time` 无法使用 `Matcher` 对象直接发送消息，因为它是由 Bot 自身事件触发，而不是外部事件。
+:::
+
+```python
+from kirami import on_time
+
+# 每隔 10 秒响应一次
+@on_time("interval", seconds=10)
+async def _():
+    print("on_time!")
+```
