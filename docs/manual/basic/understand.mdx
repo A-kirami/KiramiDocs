@@ -1,4 +1,5 @@
 ---
+sidebar_position: 0
 title: 认识插件
 ---
 
@@ -65,10 +66,10 @@ title: 认识插件
 
 ```python title=plugins/helloworld/__init__.py
 from kirami import on_fullmatch
-from kirami.typing import Event, Matcher
+from kirami.typing import Matcher
 
-@on_fullmatch("hello", ignorecase=True)
-async def _(matcher: Matcher, event: Event):
+@on_fullmatch("hello")
+async def _(matcher: Matcher):
     await matcher.finish("world")
 ```
 
@@ -118,7 +119,7 @@ plugin_dirs=["plugins"]
 
 import Chat from '@site/src/components/Chat'
 
-<Chat chats={[{ content: 'hello', send: true }, { content: 'world' }]} title="Matcha" />
+<Chat chats={[{ content: 'hello', send: true }, { content: 'world' }]} title="Hello World" />
 
 尝试发送 `hello`，你会得到 `world` 的回复，这说明你的插件已经成功加载并运行了。
 
