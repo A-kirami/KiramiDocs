@@ -55,4 +55,17 @@ import Chat from '@site/src/components/Chat'
 `on_prefix` 会将匹配的开头从消息中去除，例如：`天气 上海` 的消息会被转换为 ` 上海`，所以 `EventPlainText` 获取的纯文本消息为 `上海`。
 :::
 
+我们还可以直接注入事件，它包含了当前事件的所有信息，例如：事件类型、事件消息、事件机器人和事件发起者等。在事件处理函数中，我们可以通过 `Event` 类型获取事件信息。
+
+```python
+from kirami import on_prefix
+from kirami.typing import Event
+
+weather = on_prefix("天气", "weather", "查天气", to_me=True)
+
+@weather.handle()
+async def handle_function(event: Event):
+    print(event)  # 打印事件信息
+```
+
 KiramiBot 提供了多种依赖注入类型，可以获取不同的信息，具体内容可参考[依赖注入](../advanced/dependency)。
