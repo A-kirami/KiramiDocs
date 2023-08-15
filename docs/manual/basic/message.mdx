@@ -93,7 +93,7 @@ Message([MessageSegment.text("Hello, world!")])
 ```python
 from kirami.message import Message, MessageSegment
 
-# 链式调用构造混合消息序列
+# 链式调用构造消息序列
 Message.text("Hello, world!").image("image.png") == Message(
     [MessageSegment.text("Hello, world!"), MessageSegment.image("image.png")]
 )
