@@ -3,7 +3,7 @@ sidebar_position: 0
 title: 认识插件
 ---
 
-在正式开始编写插件之前，我们首先需要了解插件的基本概念。
+欢迎来到 KiramiBot 插件开发手册！在正式开始编写插件之前，我们首先需要了解插件的基本概念。
 
 ## 插件结构
 
@@ -47,37 +47,26 @@ title: 认识插件
 └── 📄 kirami.config.toml
 ```
 
-接着，在 `plugins` 文件夹中，我们创建一个名为 `helloworld` 的文件夹，用来存放我们的第一个插件。
+接着，在 `plugins` 文件夹中，我们创建一个名为 `weather` 的文件夹，用来存放我们的第一个插件，其中包含的文件将在稍后章节中用到。
 
 项目结构变为：
 
 ```tree title=Project
 📦 kirami-bot
 │── 📂 plugins
-|   └── 📂 helloworld
+|   └── 📂 weather
 |       └── 📄 __init__.py
 ├── 📄 pyproject.toml
 └── 📄 kirami.config.toml
 ```
 
-现在，你已经创建了插件的基本结构，并准备好开始编写你的第一个 KiramiBot 插件。
+现在，你已经建立了插件的基本结构，随时可以开始编写你的第一个 KiramiBot 插件。
 
-将下面的代码复制到 `plugins/helloworld/__init__.py` 文件中：
-
-```python title=plugins/helloworld/__init__.py
-from kirami import on_fullmatch
-from kirami.typing import Matcher
-
-@on_fullmatch("hello")
-async def _(matcher: Matcher):
-    await matcher.finish("world")
-```
-
-目前，你可以暂时不用担心代码的含义，因为在后续的章节中我们会详细介绍这段代码的功能和作用。
+在接下来的章节中，我们将继续探索插件的更多特性，以及如何利用这些特性为你的 KiramiBot 插件添加更多功能。
 
 ## 加载插件
 
-创建了插件的基本结构后，接下来我们需要了解如何在 KiramiBot 中加载这些插件。
+创建了插件的基本结构后，接下来我们将学习如何在 KiramiBot 中加载这些插件。
 
 :::caution 注意
 加载的插件模块名称（插件文件名或文件夹名）不能相同，且每一个插件只能被加载一次，重复加载将会导致异常。
@@ -89,13 +78,13 @@ async def _(matcher: Matcher):
 
 ```toml title=kirami.config.toml
 [plugin]
-plugins=["plugins.helloworld"]
+plugins=["plugins.weather"]
 ```
 
-在上述配置中，我们将 `plugins.helloworld` 添加到了 `plugins` 中，这会加载指定的插件，通常用于加载第三方插件或者项目插件。
+在上述配置中，我们将 `plugins.weather` 添加到了 `plugins` 中，这会加载指定的插件，通常用于加载第三方插件或者项目插件。
 
 :::caution 注意
-本地项目插件需要通过点分割模块名称，例如 `plugins.helloworld`，而不是 `plugins/helloworld`。
+对于本地项目插件，应使用点分割的模块名称，例如 `plugins.weather`，而不是 `plugins/weather`。
 :::
 
 ### 加载插件目录
@@ -111,7 +100,18 @@ plugin_dirs=["plugins"]
 
 ## 测试插件
 
-最后，我们需要启动 KiramiBot 并测试刚刚编写的插件。
+一个最简单的插件可能像下面这样：
+
+```python
+from kirami import on_fullmatch
+from kirami.typing import Matcher
+
+@on_fullmatch("hello")
+async def _(matcher: Matcher):
+    await matcher.finish("world")
+```
+
+让我们创建这个名为 `helloworld` 的插件，并通过 KiramiBot 加载它。
 
 :::info 提示
 你可以使用 [Matcha](https://github.com/A-kirami/matcha) 来测试插件的功能。
@@ -119,8 +119,6 @@ plugin_dirs=["plugins"]
 
 import Chat from '@site/src/components/Chat'
 
-<Chat chats={[{ content: 'hello', send: true }, { content: 'world' }]} title="Hello World" />
+<Chat chats={[{ content: 'hello', send: true }, { content: 'world' }]} title="Matcha" />
 
-尝试发送 `hello`，你会得到 `world` 的回复，这说明你的插件已经成功加载并运行了。
-
-在接下来的章节中，我们将继续探索插件的更多特性，以及如何利用这些特性为你的 KiramiBot 插件添加更多功能。
+尝试发送消息 `hello`，你会得到回复 `world`，这说明插件已经成功加载并运行了。

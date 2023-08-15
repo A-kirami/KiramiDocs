@@ -1,4 +1,5 @@
 ---
+sidebar_position: 1
 title: 事件响应器
 ---
 
@@ -7,8 +8,6 @@ title: 事件响应器
 事件响应器（Matcher）是用于对接收到的事件进行响应的重要工具。通过定义简单的规则，事件响应器可以帮助你捕获特定类型的事件，并执行相应的操作。
 
 在插件开发中，事件响应器是用来捕获并处理特定类型的事件的工具。它会检查事件是否满足一些条件，如果满足，就会触发预先定义的操作。这是插件与用户交互的基础。
-
-接下来，我们将逐步介绍如何创建一个基本的事件响应器，并让你更好地理解它的作用。让我们开始吧！
 
 </div>
 
@@ -22,36 +21,39 @@ title: 事件响应器
 
 ## 创建事件响应器
 
-在上一节中，我们创建了一个简单的插件，现在让我们将与事件响应器相关的代码提取出来：
+在上一节[创建插件](./plugin#创建插件)中，我们创建了一个 `weather` 插件，现在我们来实现他的功能。
 
-```python {1,3} showLineNumbers
-from kirami import on_fullmatch
+我们直接使用 `on_prefix()` 辅助函数来创建一个事件响应器：
 
-hello = on_fullmatch("hello")
+```python {3} title="weather/__init__.py"
+from kirami import on_prefix
+
+weather = on_prefix("天气")
 ```
 
-让我们分析一下这段代码做了什么：
+这样，我们就获得一个名为 `weather` 的事件响应器了，这个事件响应器会对 `天气` 开头的消息进行响应。
 
-- 在第 1 行，我们使用 `from kirami import on_fullmatch` 导入了一个名为 `on_fullmatch` 的辅助函数，这个函数帮助我们创建一个完全匹配消息的事件响应器。
-
-- 在第 3 行，我们使用 `on_fullmatch("hello")` 创建了一个名为 `hello` 的事件响应器。括号中的字符串 `"hello"` 是我们希望响应的消息内容。
-
-这个事件响应器会检查接收到的消息是否完全匹配 `"hello"`，如果匹配，就会执行预先定义的操作。
+:::info 提示
+如果一条消息中包含“@机器人”或以“机器人的昵称”开头，例如 `@bot 天气` 时，为了方便命令匹配，`@bot` 会被自动去除，即事件响应器收到的信息内容为 `天气`。
+同时，`event.is_tome()` 将会返回 `True`，表示该事件与机器人相关。
+:::
 
 ### 为事件响应器添加参数
 
-在辅助函数中，我们可以添加一些参数来对事件响应器进行更加精细的调整，例如事件响应器的优先级、匹配规则等。例如：
+在辅助函数中，我们可以添加一些参数来更精细地调整事件响应器的行为。例如：
 
-```python {3} showLineNumbers
-from kirami import on_fullmatch
+```python {3} title="weather/__init__.py"
+from kirami import on_prefix
 
-hello = on_fullmatch("hello", "你好", to_me=True)
+weather = on_prefix("天气", "weather", "查天气", to_me=True)
 ```
 
-这样，我们就获得了一个可以响应 `hello` 和`你好`两个命令，同时需要私聊或在消息中 @bot 时才会响应的事件响应器。
+在上述代码中，我们在 `on_prefix` 辅助函数中添加了两个命令，并将 `to_me` 设置为 `True`。
+
+这样，我们就获得了一个可以响应 `天气`、`weather`、`查天气` 三个命令，同时需要私聊或在消息中 @bot 时才会响应的事件响应器。
 
 :::info 提示
-需要注意的是，不同的辅助函数有不同的可选参数。在使用辅助函数之前，您可以参考编辑器的提示，了解不同函数的可选参数。
+需要注意的是，不同的辅助函数有不同的可选参数。在使用辅助函数之前，您可以参考编辑器的提示，以了解不同函数的可选参数。
 :::
 
 ## 常用辅助函数
@@ -59,7 +61,7 @@ hello = on_fullmatch("hello", "你好", to_me=True)
 通过导入不同的辅助函数，你可以轻松创建不同类型的事件响应器。接下来，我们将介绍一些常用的辅助函数，让你更好地掌握它们的用法。
 
 :::tip 提示
-你可以在你的插件中添加下面的示例代码，亲身体验一下这些辅助函数的用法。
+你可以尝试使用下列的示例代码创建插件，亲身体验一下这些辅助函数的用法。
 :::
 
 import Chat from '@site/src/components/Chat'
@@ -134,7 +136,6 @@ async def _(matcher: Matcher):
     { content: '/command xxx', send: true },
     { content: 'on_command!' },
   ]}
-  title="on_command"
 />
 
 ### on_shell_command
@@ -175,7 +176,6 @@ async def _(matcher: Matcher):
     { content: '/shell xxx', send: true },
     { content: 'on_shell_command!' },
   ]}
-  title="on_shell_command"
 />
 
 ### on_startswith
@@ -199,7 +199,6 @@ async def _(matcher: Matcher):
     { content: 'startxxx', send: true },
     { content: 'on_startswith!' },
   ]}
-  title="on_startswith"
 />
 
 ### on_endswith
@@ -223,7 +222,6 @@ async def _(matcher: Matcher):
     { content: 'xxxend', send: true },
     { content: 'on_endswith!' },
   ]}
-  title="on_endswith"
 />
 
 ### on_fullmatch
@@ -240,7 +238,7 @@ async def _(matcher: Matcher):
     await matcher.finish("on_fullmatch!")
 ```
 
-<Chat chats={[{ content: 'full', send: true }, { content: 'on_fullmatch!' }]} title="on_fullmatch" />
+<Chat chats={[{ content: 'full', send: true }, { content: 'on_fullmatch!' }]} />
 
 ### on_keyword
 
@@ -263,7 +261,6 @@ async def _(matcher: Matcher):
     { content: 'xxxkeyxxx', send: true },
     { content: 'on_keyword!' },
   ]}
-  title="on_keyword"
 />
 
 ### on_regex
@@ -287,7 +284,6 @@ async def _(matcher: Matcher):
     { content: 'xxxregexxxx', send: true },
     { content: 'on_regex!' },
   ]}
-  title="on_regex"
 />
 
 ### on_prefix
@@ -295,7 +291,7 @@ async def _(matcher: Matcher):
 `on_prefix` 是一个消息事件响应器，它会响应所有以指定内容开头的消息事件。
 
 :::info 提示
-与普通的 `on_startswith` 不同的是，`on_prefix` 会将前缀从消息中去除。
+与普通的 `on_startswith` 不同的是，`on_prefix` 会将匹配的开头从消息中去除。
 :::
 
 ```python
@@ -315,7 +311,6 @@ async def _(matcher: Matcher):
     { content: 'prefixxxx', send: true },
     { content: 'on_prefix!' },
   ]}
-  title="on_prefix"
 />
 
 ### on_suffix
@@ -323,7 +318,7 @@ async def _(matcher: Matcher):
 `on_suffix` 是一个消息事件响应器，它会响应所有以指定内容结尾的消息事件。
 
 :::info 提示
-与普通的 `on_endswith` 不同的是，`on_suffix` 会将后缀从消息中去除。
+与普通的 `on_endswith` 不同的是，`on_suffix` 会将匹配的结尾从消息中去除。
 :::
 
 ```python
@@ -343,7 +338,6 @@ async def _(matcher: Matcher):
     { content: 'xxxsuffix', send: true },
     { content: 'on_suffix!' },
   ]}
-  title="on_suffix"
 />
 
 ### on_time
