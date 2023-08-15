@@ -2,3 +2,270 @@
 sidebar_position: 4
 title: 消息数据操作
 ---
+
+<div className="intro">
+
+不同平台上，一条消息可以呈现出多种形式，可能是纯文本、图片、语音、富文本等，也可能是以上类型的组合。
+
+KiramiBot 为确保消息的正常处理，采用了扁平化的消息序列形式，即 `Message` 对象。消息序列是 KiramiBot 中的消息载体，无论是接收还是发送的消息，都采用消息序列的形式进行处理。
+
+</div>
+
+## 认识消息类型
+
+### 消息序列 `Message`
+
+在 KiramiBot 中，消息序列 `Message` 的主要作用是用于表达“一串消息”。它实际上是由多个消息段组成的序列，类似于 Python 中的 `list` 列表。因此，消息序列的使用方法与 `list` 有很多相似之处，例如遍历、切片、索引等。
+
+### 消息段 `MessageSegment`
+
+顾名思义，消息段 `MessageSegment` 是消息的片段。消息段是构成消息序列的最小单位，多个消息段组合在一起构成了消息序列。你可以将消息序列想象成是一段完整的文字内容，而消息段则是组成这段文字的每个句子。
+
+## 操作消息数据
+
+:::info 提示
+消息序列是 `list[MessageSegment]` 的子类，你可以用和操作 `list` 类似的方式来处理消息序列。
+:::
+
+通常情况下，KiramiBot 在接收到消息时，会将消息转换为消息序列，可以通过依赖注入 [`EventMessage`](../advanced/dependency.mdx#eventmessage)，或者使用 `event.get_message()` 获取。
+
+```python
+from kirami import on_message
+from kirami.depends import EventMessage
+from kirami.typing import Event
+
+@on_message()
+async def _(event: Event, message: EventMessage):
+    event.get_message() == message
+```
+
+:::tip 提示
+在使用事件响应器操作发送消息时，既可以使用 `str` 作为消息，也可以使用 `Message` 或者 `MessageSegment`。
+:::
+
+### 构造消息段
+
+#### 直接构造
+
+消息段 `MessageSegment` 可以直接实例化，只需提供表示消息段类型的 `type` 参数和表示消息段数据的 `data` 参数即可。
+
+```python
+from kirami.message import MessageSegment
+
+MessageSegment(type="text", data={"text": "Hello, world!"})
+```
+
+#### 工厂构造
+
+消息段可以通过 `MessageSegment` 类的工厂方法来构造，例如 `MessageSegment.text()`、`MessageSegment.image()` 等。 你可以使用各种工厂方法构造不同类型的消息段，详情请参考[MessageSegment](#)。
+
+```python
+from kirami.message import MessageSegment
+
+# 纯文本消息段
+MessageSegment.text("Hello, world!")
+
+# 图片消息段
+MessageSegment.image("https://example.com/image.png")
+```
+
+### 构造消息序列
+
+#### 直接构造
+
+`Message` 类可以直接实例化，支持 `str`、`MessageSegment`、`Iterable[MessageSegment]` 类型的参数。
+
+```python
+from kirami.message import Message, MessageSegment
+
+# str
+Message("Hello, world!")
+# MessageSegment
+Message(MessageSegment.text("Hello, world!"))
+# list[MessageSegment]
+Message([MessageSegment.text("Hello, world!")])
+```
+
+#### 链式构造
+
+`Message` 对象支持链式调用，可以直接将多种类型的消息段添加到消息序列中。
+
+```python
+from kirami.message import Message, MessageSegment
+
+# 链式调用构造混合消息序列
+Message.text("Hello, world!").image("image.png") == Message(
+    [MessageSegment.text("Hello, world!"), MessageSegment.image("image.png")]
+)
+```
+
+#### 运算构造
+
+`Message` 对象可以通过 `str`、`MessageSegment` 相加构造，详情请参考[拼接消息](#拼接消息)。
+
+### 获取消息纯文本
+
+由于消息中存在各种类型的消息段，因此通常情况下 `str(message)` **无法获取消息的纯文本**，只能获得消息序列的字符串表示。
+
+KiramiBot 为消息段定义了 `is_text()` 方法，用于判断消息段是否为纯文本；也可以使用 `message.extract_plain_text()` 方法获取消息纯文本。
+
+:::info 提示
+在上一节的[使用依赖注入](./event-data.mdx#使用依赖注入)中，我们通过依赖注入 `EventPlainText` 获取了消息纯文本，该依赖实际上是使用了消息的 `extract_plain_text()` 方法来获取纯文本内容。
+:::
+
+```python
+from kirami.message import Message, MessageSegment
+
+# 判断消息段是否为纯文本
+MessageSegment.text("text").is_text() == True
+
+# 提取消息序列纯文本字符串
+Message("text").image("image.png").extract_plain_text() == "text"
+```
+
+### 遍历
+
+消息序列继承自 `list[MessageSegment]` ，因此可以使用 `for` 循环遍历消息段。
+
+```python
+from kirami.message import Message
+
+message = Message("text1").text("text2").text("text3")
+
+# 遍历消息序列
+for segment in message:
+    ...
+```
+
+### 比较
+
+消息和消息段都可以使用 `==` 或 `!=` 运算符比较是否相同。
+
+```python
+from kirami.message import Message, MessageSegment
+
+# 判断是否不同
+MessageSegment.text("text") != MessageSegment.text("foo")
+
+# 判断是否相同
+Message("text") == Message([MessageSegment.text("text")])
+```
+
+### 检查消息段
+
+我们可以通过 `in` 运算符或消息序列的 `has` 方法来：
+
+```python
+from kirami.message import Message, MessageSegment
+
+message = Message("text")
+
+# 判断是否指定消息段是否存在
+MessageSegment.text("text") in message
+# 判断是否存在指定类型的消息段
+"text" in message
+```
+
+还可以使用消息序列的 `only` 方法来检查消息中是否仅包含指定的消息段。
+
+```python
+# 判断是否都为指定消息段
+message.only(MessageSegment.text("test"))
+# 判断是否仅包含指定类型的消息段
+message.only("text")
+```
+
+### 拼接消息
+
+`str`、`Message`、`MessageSegment` 对象之间可以直接相加，结果将生成一个新的 `Message` 对象。
+
+```python
+from kirami.message import Message, MessageSegment
+
+# 消息序列与消息段相加
+Message("text") + MessageSegment.text("text")
+# 消息序列与字符串相加
+Message("text") + "text"
+# 消息序列与消息序列相加
+Message("text") + Message("text")
+# 字符串与消息序列相加
+"text" + Message("text")
+# 消息段与消息段相加
+MessageSegment.text("text") + MessageSegment.text("text")
+# 消息段与字符串相加
+MessageSegment.text("text") + "text"
+# 消息段与消息序列相加
+MessageSegment.text("text") + Message("text")
+# 字符串与消息段相加
+"text" + MessageSegment.text("text")
+```
+
+如果你需要在当前消息序列后直接添加新的消息段，可以使用 `Message.append()`、`Message.extend()` 方法，或者使用自增运算符。
+
+```python
+msg = Message("text")
+# 自增
+msg += "text"
+msg += MessageSegment.text("text")
+msg += Message("text")
+# 附加
+msg.append("text")
+msg.append(MessageSegment.text("text"))
+# 扩展
+msg.extend([MessageSegment.text("text")])
+msg.extend(Message("text").text("text"))
+```
+
+我们也可以通过消息段或消息序列的 `join` 方法来拼接一系列消息：
+
+```python
+seg = MessageSegment.text("text")
+msg = seg.join([MessageSegment.text("first"), Message("second").text("third")])
+msg == Message("first").text("text").text("second").text("third")
+```
+
+### 过滤、索引与切片
+
+消息序列对列表的索引与切片进行了增强，在原有列表 `int` 索引与 `slice` 切片的基础上，支持 `type` 过滤索引与切片。
+
+```python
+from kirami.message import Message, MessageSegment
+
+message = Message("test").image("test2.png").image("test3.jpg").text("test4")
+
+# 索引
+message[0] == MessageSegment.text("test")
+# 切片
+message[0:2] == Message("test").image("test2.png")
+# 类型过滤，保留指定类型的消息段
+message["image"] == Message.image("test2.png").image("test3.jpg")
+# 类型索引，获取指定类型指定索引的消息段
+message["image", 0] == MessageSegment.image("test2.png")
+# 类型切片，获取指定类型的消息段切片
+message["image", 0:2] == Message.image("test2.png").image("test3.jpg")
+```
+
+我们也可以通过消息序列的 `include`、`exclude` 方法进行类型过滤。
+
+```python
+# 保留指定类型的消息段
+message.include("text", "image")
+# 排除指定类型的消息段
+message.exclude("text")
+```
+
+同样的，消息序列对列表的 `index`、`count` 方法也进行了增强。
+
+```python
+# 获取首个指定类型消息段的索引
+message.index("image") == 1
+# 获取指定类型的消息段数量
+message.count("image") == 2
+```
+
+此外，消息序列添加了一个 `get` 方法，可以用于获取指定类型指定个数的消息段。
+
+```python
+# 获取指定类型指定个数的消息段
+message.get("image", 1) == Message.image("test2.png")
+```
