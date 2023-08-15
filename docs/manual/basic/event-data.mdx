@@ -2,3 +2,57 @@
 sidebar_position: 3
 title: 获取事件信息
 ---
+
+在 KiramiBot 事件处理流程中，获取事件信息并做出对应的操作是非常常见的场景。本章节中我们将介绍如何通过**依赖注入**获取事件信息。
+
+## 初识依赖注入
+
+在事件处理流程中，事件响应器具有自己独立的上下文，例如：当前响应的事件、收到事件的机器人或者其他处理流程中新增的信息等。这些数据可以根据需要，通过依赖注入的方式传递到事件处理函数中。
+
+相对于传统的信息获取方法，通过依赖注入获取信息的最大特色在于**按需取用**。如果该事件处理函数不需要任何额外信息即可运行，就无需进行依赖注入。如果事件处理函数需要额外数据，可以通过依赖注入标记所需依赖，这些依赖将在函数运行时被注入。
+
+:::tip 提示
+对于依赖注入，你可以把它想象成外卖订餐。你是客户（事件处理函数），而外卖平台（依赖注入）根据你的需求提供不同的食物（事件信息）。
+
+简而言之，依赖注入就像是外卖平台根据你的需求将食物送到你手中，让你能够方便地获取所需的信息。这使得事件处理函数能够更灵活地获取所需的上下文数据，让编程更加便捷和可扩展。
+:::
+
+## 使用依赖注入
+
+使用依赖注入获取上下文信息非常简单，我们仅需在事件处理函数的参数中声明所需的依赖即可。在 KiramiBot 中，我们可以直接使用 `kirami.depends` 模块中定义的参数类型来声明依赖。
+
+例如，我们可以继续改进上一章节中的 `weather` 插件，使其可以获取到 `天气` 命令的地名参数，并根据地名返回天气信息。
+
+```python {7} title=weather/__init__.py
+from kirami import on_prefix
+from kirami.depends import EventPlainText
+
+weather = on_prefix("天气", "weather", "查天气", to_me=True)
+
+@weather.handle()
+async def handle_function(location: EventPlainText):
+    # 使用纯文本消息作为地名，并判断是否有效
+    if location:
+        await weather.finish(f"今天{location}的天气是...")
+    else:
+        await weather.finish("请输入地名")
+```
+
+如上方示例所示，我们使用了 `location` 作为注入参数名，注入的内容为 `EventPlainText`，也就是**事件纯文本消息**。在这个示例中，我们先会检查获得的参数是否有效，对无效参数则会结束事件。
+
+import Chat from '@site/src/components/Chat'
+
+<Chat
+  chats={[
+    { content: '天气', send: true },
+    { content: '请输入地名' },
+    { content: '天气 上海', send: true },
+    { content: '今天上海的天气是...' },
+  ]}
+/>
+
+:::tip 提示
+`on_prefix` 会将匹配的开头从消息中去除，例如：`天气 上海` 的消息会被转换为 ` 上海`，所以 `EventPlainText` 获取的纯文本消息为 `上海`。
+:::
+
+KiramiBot 提供了多种依赖注入类型，可以获取不同的信息，具体内容可参考[依赖注入](../advanced/dependency)。
