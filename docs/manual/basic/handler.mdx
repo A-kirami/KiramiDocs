@@ -1,0 +1,152 @@
+---
+sidebar_position: 2
+title: 事件处理流程
+---
+
+<div className="intro">
+
+想象一下，当有人发消息给你的聊天机器人，或者系统产生通知或请求时，机器人需要知道该做些什么。这些情况下发生的动作就是事件，而编写代码来告诉机器人如何应对这些事件，就是事件处理。
+
+就像我们在解决问题时需要遵循流程一样，处理一个事件也需要一套流程。在事件响应器对一个事件进行响应之后，会依次执行一系列的事件处理函数。简单来说，事件处理流程就是开发者设计的一套流程。
+
+</div>
+
+## 事件处理函数
+
+在事件响应器中，事件处理流程可以由一个或多个“事件处理函数”组成，这些事件处理函数**按照顺序依次**对事件进行处理，直到全部执行完成或被中断。我们可以使用事件响应器提供的“事件处理函数装饰器”来添加这些“事件处理函数”。
+
+顾名思义，“事件处理函数装饰器”是一个[装饰器（decorator）](https://docs.python.org/zh-cn/3/glossary.html#term-decorator)，那么它的使用方法也同[函数定义](https://docs.python.org/zh-cn/3/reference/compound_stmts.html#function-definitions)中所展示的包装用法相同。例如：
+
+```python {5-7} title=weather/__init__.py
+from kirami import on_prefix
+
+weather = on_prefix("天气", "weather", "查天气", to_me=True)
+
+@weather.handle()
+async def handle_function():
+    ...  # 在这里添加处理逻辑
+```
+
+如上例所示，我们使用 `weather` 响应器的 `handle` 装饰器将一个函数 `handle_function` 添加到事件处理流程中。当 `weather` 响应器被触发时，会依次调用 `weather` 响应器的事件处理函数，即 `handle_function` 来对事件进行处理。
+
+:::tip 提示
+如果事件处理流程中只有一个处理函数，我们还可以使用简写形式。
+
+```python {3} title=weather/__init__.py
+from kirami import on_prefix
+
+@on_prefix("天气", "weather", "查天气", to_me=True)
+async def handle_function():
+    ...  # 在这里添加处理逻辑
+```
+
+:::
+
+## 事件响应器操作
+
+在事件处理流程中，我们可以使用事件响应器操作来进行交互或改变事件处理流程，例如向机器人用户发送消息或提前结束事件处理流程等。
+
+与事件处理函数装饰器类似，事件响应器操作通常作为事件响应器 `Matcher` 的[类方法](https://docs.python.org/zh-cn/3/library/functions.html#classmethod)存在，因此调用事件响应器操作的方式为 `Matcher.func()` 。不过不同的是，事件响应器操作并不是装饰器，因此并不需要@进行标注。
+
+:::info 提示
+如果使用了 `Matcher` 的简写形式，我们可以通过 `matcher` 参数来调用事件响应器操作。
+
+```python {2,5} title=weather/__init__.py
+from kirami import on_prefix
+from kirami.typing import Matcher
+
+@on_prefix("天气", "weather", "查天气", to_me=True)
+async def handle_function(matcher: Matcher):
+    ...  # 在这里添加处理逻辑
+```
+
+:::
+
+### send
+
+`send` 操作方法用于向机器人用户发送消息。例如：
+
+```python {7} title=weather/__init__.py
+from kirami import on_prefix
+
+weather = on_prefix("天气", "weather", "查天气", to_me=True)
+
+@weather.handle()
+async def handle_function():
+    await weather.send("天气是...")
+```
+
+如上例所示，我们使用 `weather` 响应器的 `send` 操作方法向机器人用户发送了一条消息：`天气是...`。效果如下：
+
+import Chat from '@site/src/components/Chat'
+
+<Chat chats={[{ content: '天气', send: true }, { content: '天气是...' }]} />
+
+我们还可以多次调用 `send` 方法，向机器人用户发送多条消息。例如：
+
+```python {7,8} title=weather/__init__.py
+from kirami import on_prefix
+
+weather = on_prefix("天气", "weather", "查天气", to_me=True)
+
+@weather.handle()
+async def handle_function():
+    await weather.send("天气是...")
+    await weather.send("建议...")
+```
+
+效果如下：
+
+<Chat chats={[{ content: '天气', send: true }, { content: '天气是...' }, { content: '建议...' }]} />
+
+### finish
+
+如果我们需要在发送消息之后立即结束事件处理流程，可以使用 `finish` 方法。
+
+需要注意的是，`finish` 方法通过抛出 `FinishedException` 异常来结束事件响应流程，这意味着 `finish` 后面的代码将不会被执行。
+
+```python {7,8} title=weather/__init__.py
+from kirami import on_prefix
+
+weather = on_prefix("天气", "weather", "查天气", to_me=True)
+
+@weather.handle()
+async def handle_function():
+    await weather.finish("天气是...")
+    await weather.send("这条消息不会被发送")
+```
+
+效果如下：
+
+<Chat chats={[{ content: '天气', send: true }, { content: '天气是...' }]} />
+
+`finish` 方法的消息内容是可选的，如果你只需要结束事件处理流程而不需要发送消息，可以不传入消息内容。
+
+```python {7,8} title=weather/__init__.py
+from kirami import on_prefix
+
+weather = on_prefix("天气", "weather", "查天气", to_me=True)
+
+@weather.handle()
+async def handle_function():
+    await weather.finish()
+    await weather.send("这条消息不会被发送")
+```
+
+:::danger 警告
+由于 `finish` 是通过抛出 `FinishedException` 异常来结束事件处理流程的，因此在未加限制的 `try-except` 块中捕获该异常可能会影响事件处理流程的正常结束。为了确保正确处理事件，建议在异常捕获时指定具体的错误类型或排除所有 [MatcherException](#) 类型的异常（如下所示），或将 `finish` 放在异常捕获之外使用。
+
+```python
+from kirami.exception import MatcherException
+
+try:
+    await weather.finish("天气是...")
+except MatcherException:
+    raise
+except Exception as e:
+    pass # 在这里处理其他异常
+```
+
+:::
+
+目前 KiramiBot 提供了多种事件响应器操作，其中包括用于机器人用户交互与流程控制两大类。如果需要更深入的使用方法，可以查看[会话控制](../depth/session-control)部分。
