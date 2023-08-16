@@ -283,6 +283,7 @@ prompt = "冷却中，请稍后再试"
   - `group`：群组每日配额，群组内所有用户共用每日配额
   - `user`：用户每日配额，用户独立每日配额
 - `prompt`：限制状态提示，当服务或功能处于配额上限状态时，将会发送此提示消息
+- `reset`：配额重置时间，`str` 格式为 `HH` 或 `HH:MM`。可以传入 `int` 类型表示小时数。
 
 <Tabs>
 <TabItem value="service" label="服务" default>
@@ -290,6 +291,7 @@ prompt = "冷却中，请稍后再试"
 ```toml
 [plugin]
 quota = 3
+reset = 0
 # 或者
 [plugin]
 quota = { limit = 3, prompt = "配额已用完，请明天再试"}
@@ -297,6 +299,7 @@ quota = { limit = 3, prompt = "配额已用完，请明天再试"}
 [plugin]
 quota.limit = 3
 quota.type = "local"
+quota.reset = "18:30"
 # 或者
 [plugin.quota]
 limit = 3
@@ -310,6 +313,7 @@ prompt = "配额已用完，请明天再试"
 ```toml
 [[plugin.matchers]]
 quota = 3
+reset = 0
 # 或者
 [[plugin.matchers]]
 quota = { limit = 3, prompt = "配额已用完，请明天再试"}
@@ -317,6 +321,7 @@ quota = { limit = 3, prompt = "配额已用完，请明天再试"}
 [[plugin.matchers]]
 quota.limit = 3
 quota.type = "local"
+quota.reset = "18:30"
 # 或者
 [[plugin.matchers.quota]]
 limit = 3
