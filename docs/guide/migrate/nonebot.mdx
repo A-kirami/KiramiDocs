@@ -1,0 +1,96 @@
+---
+title: 从 NoneBot2 迁移
+---
+
+由于 KiramiBot 兼容 NoneBot2 的插件和配置，因此你可以很简单的从 NoneBot2 迁移到 KiramiBot 。
+
+## 安装 KiramiBot
+
+在原 NoneBot2 项目中安装 KiramiBot。
+
+import TabItem from '@theme/TabItem'
+import Tabs from '@theme/Tabs'
+
+<Tabs>
+<TabItem value="pdm" label="PDM" default>
+
+```bash
+pdm add kiramibot
+```
+
+</TabItem>
+<TabItem value="poetry" label="Poetry">
+
+```bash
+poetry add kiramibot
+```
+
+</TabItem>
+<TabItem value="pip" label="pip">
+
+```bash
+pip install kiramibot
+```
+
+</TabItem>
+</Tabs>
+
+## 修改配置
+
+将 `pyproject.toml` 中的 `tool.nonebot` 的插件加载配置复制到 KiramiBot 的[配置文件](../tutorial/config)中。
+
+```toml title="pyproject.toml"
+[tool.nonebot]
+plugins=["plugins"]
+plugin_dirs=["src/plugins"]
+```
+
+这里以 `kirami.config.toml` 为例，将配置复制到 `kirami.config.toml` 中。
+
+```toml title="kirami.config.toml"
+[plugin]
+plugins=["plugins"]
+plugin_dirs=["src/plugins"]
+```
+
+## 添加入口
+
+最后在项目根目录中创建一个 `bot.py` 文件，内容如下：
+
+```python title="bot.py"
+from kirami import KiramiBot
+
+bot = KiramiBot()
+app = bot.asgi
+
+if __name__ == "__main__":
+    bot.run(app="__mp_main__:app")
+```
+
+## 完成
+
+至此，你已经完成了从 NoneBot2 到 KiramiBot 的迁移，运行 `bot.py` 来启动你的机器人吧。
+
+<Tabs>
+<TabItem value="pdm" label="PDM" default>
+
+```bash
+pdm run bot.py
+```
+
+</TabItem>
+<TabItem value="poetry" label="Poetry">
+
+```bash
+poetry run python bot.py
+```
+
+</TabItem>
+<TabItem value="pip" label="pip">
+
+```bash
+python bot.py
+```
+
+</TabItem>
+</Tabs>
