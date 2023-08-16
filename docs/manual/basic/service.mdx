@@ -2,3 +2,477 @@
 sidebar_position: 5
 title: 插件服务化
 ---
+
+在 KiramiBot 运行时，插件不再仅仅是一些独立的功能模块，而是被转化为可管理的服务。这个过程被称为插件的服务化。
+
+## 认识服务化
+
+插件的服务化是指在 KiramiBot 加载插件时，将每个插件转化为一个可管理的运行时服务。这个转化过程通过读取特定的配置文件，为每个插件创建一个 `Service` 对象，从而使插件成为可管理的组件。
+
+通过将插件转化为服务，KiramiBot 实现了更便捷的插件管理、获取插件信息、控制插件状态以及监控插件运行状态的能力。
+
+### 服务 `Service`
+
+在 KiramiBot 运行时，每个插件都会被封装在一个 `Service` 服务对象中。这个对象不仅包含插件的基本信息，如名称、版本、使用方法等，还记录了插件的状态信息，包括开关状态和运行状态。通过操作 `Service` 对象，可以方便地对插件进行管理，如启用、禁用、配置等操作。
+
+### 功能 `Ability`
+
+除了插件本身的服务化，插件内部的每个事件响应器也会在 KiramiBot 运行时被转化为一个 `Ability` 功能对象。在服务化后，每个功能拥有自己的状态，与其所属的服务的状态相互独立，这意味着每个功能都有自己的特性和配置。
+
+## 服务化配置
+
+在服务化过程中，KiramiBot 会读取插件目录下的 `service.toml` 文件，该文件用于配置插件的服务化信息。通过合理配置 `service.toml`，可以为每个插件定义其服务化后的行为和特性，从而更好地管理插件的运行时行为。
+
+现在让我们对之前的 `weather` 插件进行服务化配置。
+
+```toml title="weather/service.toml"
+[plugin]
+name = "天气查询"
+alias = ["查天气", "weather"]
+summary = "查询指定地区的天气情况"
+usage = "发送 `天气 地区` 即可查询指定地区的天气情况。"
+version = "0.1.0"
+author = "you"
+
+[[plugin.matchers]]
+name = "weather"
+cooldown = 10
+```
+
+你可以在下面的配置项介绍中了解上面配置中的每个字段的含义。
+
+### 通用配置
+
+在服务化过程中，你可以为每个服务和功能定义一些通用的配置选项，以控制其行为和特性。
+
+import TabItem from '@theme/TabItem'
+import Tabs from '@theme/Tabs'
+
+#### enabled
+
+- 类型：`bool`
+- 默认值：`True`
+
+服务或功能的默认启用状态，如果设置为 `False`，则服务或功能在服务化后将会被禁用。
+
+<Tabs>
+<TabItem value="service" label="服务" default>
+
+```toml
+[plugin]
+enabled = true
+```
+
+</TabItem>
+<TabItem value="ability" label="功能">
+
+```toml
+[[plugin.matchers]]
+enabled = true
+```
+
+</TabItem>
+</Tabs>
+
+#### position
+
+- 类型：`int | None`
+- 默认值：`None`
+
+帮助列表中排序位置，数字越小，排序越靠前。如果为 `None`，则服务或功能将排在最后。
+
+<Tabs>
+<TabItem value="service" label="服务" default>
+
+```toml
+[plugin]
+position = 1
+```
+
+</TabItem>
+<TabItem value="ability" label="功能">
+
+```toml
+[[plugin.matchers]]
+position = 1
+```
+
+</TabItem>
+</Tabs>
+
+#### visible
+
+- 类型：`bool`
+- 默认值：`True`
+
+是否在帮助列表中显示。
+
+<Tabs>
+<TabItem value="service" label="服务" default>
+
+```toml
+[plugin]
+visible = true
+```
+
+</TabItem>
+<TabItem value="ability" label="功能">
+
+```toml
+[[plugin.matchers]]
+visible = true
+```
+
+</TabItem>
+</Tabs>
+
+#### role
+
+- 类型：`RoleConfig`
+- 默认值：`RoleConfig(user="normal", manager="admin")`
+
+服务或功能的权限配置，用于控制服务或功能的使用权限和管理权限。
+
+- `user`: 使用所需最低权限角色，默认为普通权限角色
+- `manager`: 管理所需最低权限角色，默认为管理员权限角色
+
+:::info 提示
+权限角色是 KiramiBot 的权限管理系统中的角色，用于控制用户的权限。你可以在 [权限控制](../depth/permission) 章节中了解更多关于权限角色的信息。
+:::
+
+<Tabs>
+<TabItem value="service" label="服务" default>
+
+```toml
+[plugin]
+role = { user = "normal", manager = "admin" }
+# 或者
+[plugin]
+role.user = "normal"
+role.manager = "admin"
+# 或者
+[plugin.role]
+user = "normal"
+manager = "admin"
+```
+
+</TabItem>
+<TabItem value="ability" label="功能">
+
+```toml
+[[plugin.matchers]]
+role = { user = "normal", manager = "admin" }
+# 或者
+[[plugin.matchers]]
+role.user = "normal"
+role.manager = "admin"
+# 或者
+[[plugin.matchers.role]]
+user = "normal"
+manager = "admin"
+```
+
+</TabItem>
+</Tabs>
+
+#### scope
+
+- 类型：`Literal["group", "private", "all"]`
+- 默认值：`"all"`
+
+服务或功能的作用域，用于控制服务或功能的使用范围。
+
+作用域范围：
+
+- `group`: 只响应群聊消息
+- `private`: 只响应私聊消息
+- `all`: 响应私聊和群聊消息
+
+<Tabs>
+<TabItem value="service" label="服务" default>
+
+```toml
+[plugin]
+scope = "all"
+```
+
+</TabItem>
+<TabItem value="ability" label="功能">
+
+```toml
+[[plugin.matchers]]
+scope = "all"
+```
+
+</TabItem>
+</Tabs>
+
+#### cooldown
+
+- 类型：`int | CooldownConfig | None`
+- 默认值：`None`
+
+服务或功能的冷却时间，用于控制服务或功能的使用频率。如果为 `int` 类型，则限制范围默认为`局部冷却时间`。
+
+`CooldownConfig` 的字段有：
+
+- `time`：冷却时间，单位为秒
+- `type`：限制范围：
+  - `global`：全局冷却时间，所有群组和用户共用冷却时间
+  - `local`：局部冷却时间，群组内每个用户独立冷却时间
+  - `group`：群组冷却时间，群组内所有用户共用冷却时间
+  - `user`：用户冷却时间，用户独立冷却时间
+- `prompt`：限制状态提示，当服务或功能处于冷却状态时，将会发送此提示消息
+
+<Tabs>
+<TabItem value="service" label="服务" default>
+
+```toml
+[plugin]
+cooldown = 10
+# 或者
+[plugin]
+cooldown = { time = 10, prompt = "冷却中，请稍后再试"}
+# 或者
+[plugin]
+cooldown.time = 10
+cooldown.type = "local"
+# 或者
+[plugin.cooldown]
+time = 10
+type = "local"
+prompt = "冷却中，请稍后再试"
+```
+
+</TabItem>
+<TabItem value="ability" label="功能">
+
+```toml
+[[plugin.matchers]]
+cooldown = 10
+# 或者
+[[plugin.matchers]]
+cooldown = { time = 10, prompt = "冷却中，请稍后再试"}
+# 或者
+[[plugin.matchers]]
+cooldown.time = 10
+cooldown.type = "local"
+# 或者
+[[plugin.matchers.cooldown]]
+time = 10
+type = "local"
+prompt = "冷却中，请稍后再试"
+```
+
+</TabItem>
+</Tabs>
+
+#### quota
+
+- 类型：`int | QuotaConfig | None`
+- 默认值：`None`
+
+服务或功能的每日配额，用于控制服务或功能的使用次数。如果为 `int` 类型，则限制范围默认为`局部每日配额`。
+
+`QuotaConfig` 的字段有：
+
+- `limit`：每日配额
+- `type`：限制范围：
+  - `global`：全局每日配额，所有群组和用户共用每日配额
+  - `local`：局部每日配额，群组内每个用户独立每日配额
+  - `group`：群组每日配额，群组内所有用户共用每日配额
+  - `user`：用户每日配额，用户独立每日配额
+- `prompt`：限制状态提示，当服务或功能处于配额上限状态时，将会发送此提示消息
+
+<Tabs>
+<TabItem value="service" label="服务" default>
+
+```toml
+[plugin]
+quota = 3
+# 或者
+[plugin]
+quota = { limit = 3, prompt = "配额已用完，请明天再试"}
+# 或者
+[plugin]
+quota.limit = 3
+quota.type = "local"
+# 或者
+[plugin.quota]
+limit = 3
+type = "local"
+prompt = "配额已用完，请明天再试"
+```
+
+</TabItem>
+<TabItem value="ability" label="功能">
+
+```toml
+[[plugin.matchers]]
+quota = 3
+# 或者
+[[plugin.matchers]]
+quota = { limit = 3, prompt = "配额已用完，请明天再试"}
+# 或者
+[[plugin.matchers]]
+quota.limit = 3
+quota.type = "local"
+# 或者
+[[plugin.matchers.quota]]
+limit = 3
+type = "local"
+prompt = "配额已用完，请明天再试"
+```
+
+</TabItem>
+</Tabs>
+
+### 服务配置
+
+针对插件的特定的服务配置，需要填写在 `[plugin]` [表](https://toml.io/cn/v1.0.0#%E8%A1%A8)中。
+
+#### name
+
+- 类型：`str`
+
+服务名称，如果不填写，则默认为插件名称。
+
+```toml
+[plugin]
+name = "天气查询"
+```
+
+#### alias
+
+- 类型：`set[str]`
+- 默认值：`set()`
+
+服务别名，用于服务管理。
+
+```toml
+[plugin]
+alias = ["查天气", "weather"]
+```
+
+#### summary
+
+- 类型：`str`
+- 默认值：`""`
+
+插件摘要，简短说明插件的功能。
+
+```toml
+[plugin]
+summary = "查询指定地区的天气情况"
+```
+
+#### description
+
+- 类型：`str`
+- 默认值：`""`
+
+插件详细说明，详细说明插件的功能。不填写则默认为插件摘要。
+
+```toml
+[plugin]
+description = "通过调用天气 API 查询指定地区的天气情况，可查询的地区包括全球各地的城市、省份、国家等。"
+```
+
+#### usage
+
+- 类型：`str`
+- 默认值：`""`
+
+插件使用方法，详细说明插件的使用方法。
+
+```toml
+[plugin]
+usage = "发送 `天气 地区` 即可查询指定地区的天气情况。"
+```
+
+#### version
+
+- 类型：`str`
+- 默认值：`"0.0.0"`
+
+插件版本号。
+
+```toml
+[plugin]
+version = "0.1.0"
+```
+
+#### author
+
+- 类型：`str`
+- 默认值：`"unknown"`
+
+插件作者。
+
+```toml
+[plugin]
+author = "you"
+```
+
+#### tags
+
+- 类型：`set[str]`
+- 默认值：`set()`
+
+插件标签，用于分类插件。
+
+```toml
+[plugin]
+tags = ["生活", "实用"]
+```
+
+#### extra
+
+- 类型：`dict[str, Any]`
+- 默认值：`{}`
+
+额外信息，用于存储插件的自定义信息。
+
+```toml
+[plugin]
+extra = { "foo": "bar" }
+```
+
+### 功能配置
+
+针对事件响应器的特定的功能配置，需要填写在 `[[plugin.matchers]]` [表数组](https://toml.io/cn/v1.0.0#%E8%A1%A8%E6%95%B0%E7%BB%84)中。
+
+#### name
+
+- 类型：`str`
+
+功能名称，也就是事件响应器的名称。如果使用事件响应器简写，则需要填写**首个事件处理函数的名称**。
+
+```toml
+[[plugin.matchers]]
+name = "weather"
+```
+
+#### command
+
+- 类型：`str`
+- 默认值：`""`
+
+功能命令的示例。
+
+```toml
+[[plugin.matchers]]
+command = "天气 <地区>"
+```
+
+#### description
+
+- 类型：`str`
+- 默认值：`""`
+
+功能详细说明，详细说明功能的功能。
+
+```toml
+[[plugin.matchers]]
+description = "查询指定地区的天气情况"
+```
