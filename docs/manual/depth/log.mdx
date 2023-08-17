@@ -1,3 +1,76 @@
 ---
 title: 日志
 ---
+
+无论是在开发还是在生产环境中，日志都是一个重要的功能，可以帮助我们了解运行状况、排查问题等。虽然我们可以使用 `print` 来将需要的信息输出到控制台，但是这种方式难以控制，而且不利于日志的归档、分析等。KiramiBot 使用优秀的 [Loguru](https://loguru.readthedocs.io/) 库来进行日志记录。
+
+## 记录日志
+
+我们可以从 KiramiBot 中导入 `logger` 对象，然后使用 `logger` 对象的方法来记录日志。
+
+```python
+from kirami import logger
+
+# 跟踪
+logger.trace("This is a trace message")
+# 调试
+logger.debug("This is a debug message")
+# 信息
+logger.info("This is an info message")
+# 成功
+logger.success("This is a success message")
+# 警告
+logger.warning("This is a warning message")
+# 错误
+logger.error("This is an error message")
+# 严重
+logger.critical("This is a critical message")
+```
+
+我们仅需一行代码即可记录对应级别的日志。日志可以通过配置 [`LOG_LEVEL` 配置项](../../guide/tutorial/config#log_level)来过滤输出等级，控制台中仅会输出大于等于 `LOG_LEVEL` 的日志。默认的 `LOG_LEVEL` 为 `INFO`，即只会输出 `INFO`、`SUCCESS`、`WARNING`、`ERROR`、`CRITICAL` 级别的日志。
+
+如果日志中还需要记录异常回溯 `Exception traceback`，可以向 `logger` 添加 `exception` 选项：
+
+```python {4}
+try:
+    1 / 0
+except ZeroDivisionError:
+    logger.opt(exception=True).error("ZeroDivisionError")
+```
+
+如果需要输出彩色日志，可以向 `logger` 添加 `colors` 选项：
+
+```python
+logger.opt(colors=True).warning("We got a <red>BIG</red> problem")
+```
+
+更多日志记录方法请参考 [Loguru 文档](https://loguru.readthedocs.io/)。
+
+## 新建日志
+
+KiramiBot 使用插件名或者调用者模块名来作为日志名，如果你需要自定义日志名，KiramiBot 提供了一个 `new_logger` 方法用于新建日志记录器。
+
+```python
+from kirami.log import new_logger
+
+logger = new_logger("my_logger")
+```
+
+你还可以设置额外的日志过滤等级：
+
+```python
+logger = new_logger("my_logger", filter_level="DEBUG")
+```
+
+## 重定向 logging 日志
+
+`logging` 是 Python 标准库中的日志模块，KiramiBot 提供了一个 logging handler 用于将 `logging` 日志重定向到 `loguru` 处理。
+
+```python
+from kirami.log import LoguruHandler
+
+# root logger 添加 LoguruHandler
+logging.basicConfig(handlers=[LoguruHandler()])
+# 或者为其他 logging.Logger 添加 LoguruHandler
+logger.addHandler(LoguruHandler())
+```
