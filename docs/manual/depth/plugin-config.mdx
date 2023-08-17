@@ -16,7 +16,11 @@ from kirami.config import BaseConfig
 
 class Config(BaseConfig):
     api_key: str
+    """天气 API Key"""
     command_to_me: bool = True
+    """是否只有@bot或者私聊时才响应"""
+    allow_cities: list[str] = []
+    """允许查询的城市列表"""
 ```
 
 在 `config.py` 中，我们定义了一个 `Config` 类，它继承自 `BaseConfig`，并定义了一些配置项。
@@ -32,7 +36,11 @@ from pydantic import validator
 
 class Config(BaseConfig):
     api_key: str
+    """天气 API Key"""
     command_to_me: bool = True
+    """是否只有@bot或者私聊时才响应"""
+    allow_cities: list[str] = []
+    """允许查询的城市列表"""
 
     @validator("api_key")
     def check_api_key(cls, v):
@@ -52,6 +60,7 @@ KiramiBot 的配置文件我们在用户指南中的[配置](../../guide/tutoria
 ```toml title=kirami.config.toml
 [weather]
 api_key = "your_api_key"
+allow_city = ["北京", "上海", "广州"]
 ```
 
 ## 读取配置
