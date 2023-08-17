@@ -2,3 +2,226 @@
 sidebar_position: 3
 title: 会话状态
 ---
+
+在事件处理流程中，和用户交互的过程即是会话。在会话中，我们可能需要记录一些信息，例如用户的重试次数等等，以便在会话中的不同阶段进行判断和处理。这些信息都可以存储于会话状态中。
+
+## 使用会话状态
+
+KiramiBot 中的会话状态是一个字典，可以通过类型 `State` 来获取。字典内可以存储任意类型的数据，但是要注意的是，KiramiBot 本身也会在会话状态中存储一些信息，因此不要使用 KiramiBot 占用的键名。
+
+```python
+from kirami.typing import State
+
+@matcher.got("key", prompt="请输入密码")
+async def _(state: State, key: ArgPlainText):
+    if key != "some password":
+        try_count = state.get("try_count", 1)
+        if try_count >= 3:
+            await matcher.finish("密码错误次数过多")
+        else:
+            state["try_count"] = try_count + 1
+            await matcher.reject("密码错误，请重新输入")
+    await matcher.finish("密码正确")
+```
+
+会话状态的生命周期与事件处理流程相同，在期间的任何一个事件处理函数都可以进行读写。
+
+```python
+from kirami.typing import State
+
+@matcher.handle()
+async def _(state: State):
+    state.key = "value"
+
+@matcher.handle()
+async def _(state: State):
+    await matcher.finish(state.key)
+```
+
+:::info 提示
+`State` 是特殊的字典，你可以使用 `.` 操作符来访问键值，例如 `state.key`。
+:::
+
+## 会话状态属性
+
+为了方便使用，KiramiBot 会话状态提供了一些属性，用于直接访问一些常用的键名。
+
+### startswith
+
+- 类型：`str`
+
+`on_startswith` 的响应触发前缀。
+
+```python
+@on_startswith("prefix")
+async def _(state: State):
+    await matcher.finish(state.startswith)
+```
+
+### prefix
+
+- 类型：`str`
+
+`on_prefix` 的响应触发前缀。
+
+```python
+@on_prefix("prefix")
+async def _(state: State):
+    await matcher.finish(state.prefix)
+```
+
+### endswith
+
+- 类型：`str`
+
+`on_endswith` 的响应触发后缀。
+
+```python
+@on_endswith("suffix")
+async def _(state: State):
+    await matcher.finish(state.endswith)
+```
+
+### suffix
+
+- 类型：`str`
+
+`on_suffix` 的响应触发后缀。
+
+```python
+@on_suffix("suffix")
+async def _(state: State):
+    await matcher.finish(state.suffix)
+```
+
+### fullmatch
+
+- 类型：`str`
+
+`on_fullmatch` 的响应触发完整消息。
+
+```python
+@on_fullmatch("fullmatch")
+async def _(state: State):
+    await matcher.finish(state.fullmatch)
+```
+
+### keyword
+
+- 类型：`str`
+
+`on_keyword` 的响应触发关键词。
+
+```python
+@on_keyword("keyword")
+async def _(state: State):
+    await matcher.finish(state.keyword)
+```
+
+### matched
+
+- 类型：`Match[str]`
+
+`on_regex` 的正则匹配结果。
+
+```python
+@on_regex(r"(\d+)")
+async def _(state: State):
+    await matcher.finish(state.matched.group(1))
+```
+
+### shell_args
+
+- 类型：`Namespace | ParserExit`
+
+`on_shell_command` 的 shell 命令解析后的参数字典。
+
+```python
+@on_shell_command("command")
+async def _(state: State):
+    await matcher.finish(state.shell_args.arg)
+```
+
+### shell_argv
+
+- 类型：`list[str | MessageSegment]`
+
+`on_shell_command` 的 shell 命令原始参数列表。
+
+```python
+@on_shell_command("command")
+async def _(state: State):
+    await matcher.finish(state.shell_argv)
+```
+
+### command
+
+- 类型：`tuple[str, ...]`
+
+`on_command` 和 `on_shell_command` 的消息命令元组。
+
+```python
+@on_command("command")
+async def _(state: State):
+    await matcher.finish(state.command)
+```
+
+### raw_command
+
+- 类型：`str`
+
+`on_command` 和 `on_shell_command` 的消息命令文本。
+
+```python
+@on_command("command")
+async def _(state: State):
+    await matcher.finish(state.raw_command)
+```
+
+### command_arg
+
+- 类型：`Message`
+
+`on_command` 的消息命令参数。
+
+```python
+@on_command("command")
+async def _(state: State):
+    await matcher.finish(state.command_arg)
+```
+
+### command_start
+
+- 类型：`str`
+
+`on_command` 和 `on_shell_command` 的消息命令开头。
+
+```python
+@on_command("command")
+async def _(state: State):
+    await matcher.finish(state.command_start)
+```
+
+### command_whitespace
+
+- 类型：`str`
+
+`on_command` 和 `on_shell_command` 的消息命令与参数间空白符。
+
+```python
+@on_command("command")
+async def _(state: State):
+    await matcher.finish(state.command_whitespace)
+```
+
+### argot
+
+- 类型：`dict[str, Any]`
+
+[暗语消息](../advanced/argot)的内容。
+
+```python
+@on_fullmatch("argot", argot=True)
+async def _(state: State):
+    await matcher.finish(state.argot["content"])
+```
