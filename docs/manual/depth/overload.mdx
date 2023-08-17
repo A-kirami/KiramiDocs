@@ -1,3 +1,127 @@
 ---
 title: 事件类型与重载
 ---
+
+在之前的示例中，我们已经了解了如何[获取事件信息](../basic/event-data)以及[使用平台接口](api-calling)。然而，事件信息通常不仅仅包含消息这一个内容，还有其他平台提供的信息，例如消息发送时间、消息发送者等等。在本章节中，我们将介绍如何获取事件更多的信息以及根据事件类型进行不同的处理。
+
+## 事件类型
+
+在 KiramiBot 中，事件均是 `kirami.event.Event` 基类的子类型，这个基类抽象出了一些必要的属性和方法。在[自定义权限](permission#自定义权限)一节中，我们就使用了 `Event` 的抽象方法 `get_user_id` 来获取事件发送者 ID。
+
+由于事件是基类的子类，实际上我们可以获得的信息通常比基类抽象方法所提供的信息更多。如果基类提供的信息无法满足我们的需求，我们可以稍微修改事件处理函数的事件参数类型注解，将其改为子类类型，这样我们就能够利用子类提供的更多信息。
+
+```python {4} title=weather/__init__.py
+from kirami.event import MessageEvent
+
+@weather.got("location", prompt="请输入地名")
+async def got_location(event: MessageEvent, location: ArgPlainText):
+    await weather.finish(f"{event.time.strftime('%Y-%m-%d')} {location} 的天气是...")
+```
+
+在上述代码中，我们获取了消息事件所提供的发送时间 `time` 属性。有关事件类型和属性的详细信息可以参考 [OneBotV11 事件](https://github.com/botuniverse/onebot-11/tree/master/event)。
+
+:::warning 注意
+如果**基类**就能满足你的需求，那么就**不要修改**事件参数类型注解，这样可以使你的代码更加**通用**。
+:::
+
+### 基类抽象方法
+
+所有事件模型均继承自 `Event` 基类，基类能提供如下信息：
+
+#### 事件类型
+
+事件类型通常为 `meta_event`、`message`、`notice`、`request`。
+
+```python
+type: str = event.get_type()
+```
+
+#### 事件名称
+
+事件名称，通常用于日志记录。
+
+```python
+name: str = event.get_event_name()
+```
+
+#### 事件描述
+
+事件描述，通常用于日志记录。
+
+```python
+description: str = event.get_event_description()
+```
+
+#### 事件日志字符串
+
+事件日志字符串由事件名称和事件描述组成，用于日志记录。
+
+```python
+log: str = event.get_log_string()
+```
+
+#### 事件主体 ID
+
+事件主体 ID 通常为机器人用户 ID。
+
+```python
+user_id: str = event.get_user_id()
+```
+
+#### 事件会话 ID
+
+事件会话 ID 通常为机器人用户 ID 与群聊/频道 ID 组合而成。
+
+```python
+session_id: str = event.get_session_id()
+```
+
+#### 事件消息
+
+如果事件包含消息，则可以通过该方法获取，否则会产生异常。
+
+```python
+message: Message = event.get_message()
+```
+
+#### 事件纯文本消息
+
+通常为事件消息的纯文本内容，如果事件不包含消息，则会产生异常。
+
+```python
+text: str = event.get_plaintext()
+```
+
+#### 事件是否与机器人有关
+
+通常将事件目标主体为机器人、消息中包含“@机器人”或以“机器人的昵称”开始视为与机器人有关。
+
+```python
+is_tome: bool = event.is_tome()
+```
+
+## 重载
+
+我们在编写机器人时，经常会遇到一个问题：如何对私聊和群聊消息进行不同的处理？如何对不同的事件进行不同的处理？为了解决这些问题，KiramiBot 提供了一个简便而高效的解决方案——重载。
+
+简单来说，依赖函数会根据其参数的类型注解来决定是否执行，会忽略不符合参数类型注解的情况。通过修改事件处理函数的参数类型注解，我们可以实现对不同事件类型的处理：
+
+```python {4,8}
+from kirami.event import PrivateMessageEvent, GroupMessageEvent
+
+@matcher.handle()
+async def handle_private(event: PrivateMessageEvent):
+    await matcher.finish("私聊消息")
+
+@matcher.handle()
+async def handle_group(event: GroupMessageEvent):
+    await matcher.finish("群聊消息")
+```
+
+这样，机器人用户就会在私聊和群聊中分别收到不同的回复。
+
+:::warning 注意
+重载机制适用于所有的参数类型注解。因此，依赖注入也可以利用这个特性来处理不同的返回值。
+
+但 Bot、Event 和 Matcher 三者的参数类型注解具有最高检查优先级，如果其中任一类型注解不匹配，那么其他依赖注入将不会执行（如：`depends`）。
+:::
