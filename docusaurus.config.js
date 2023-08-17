@@ -95,7 +95,7 @@ const config = {
             type: 'custom-shop',
             position: 'left',
             text: '浏览应用商店',
-            href: 'https://github.com/A-kirami/KiramiBot',
+            href: 'https://github.com/A-kirami/kirami-plugins-index',
           },
           {
             type: 'docsVersionDropdown',
