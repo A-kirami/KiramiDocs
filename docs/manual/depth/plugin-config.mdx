@@ -2,3 +2,76 @@
 sidebar_position: 0
 title: 插件配置
 ---
+
+配置是项目中非常重要的一部分，为了方便我们控制机器人的行为，KiramiBot 提供了一套配置系统。下面我们将会改进在[起步](../basic/plugin)中编写的天气插件，使其能够读取用户配置。
+
+## 配置模型
+
+在 KiramiBot 中，我们使用 `kirami.config` 模块中的 `BaseConfig` 来定义配置模型，这个模型可以被用于配置的读取和类型检查等。
+
+例如在 `weather` 插件目录中新建 `config.py` 来定义一个模型：
+
+```python title=weather/config.py
+from kirami.config import BaseConfig
+
+class Config(BaseConfig):
+    api_key: str
+    command_to_me: bool = True
+```
+
+在 `config.py` 中，我们定义了一个 `Config` 类，它继承自 `BaseConfig`，并定义了一些配置项。
+
+:::info 提示
+`BaseConfig` 是通过 [pydantic](https://docs.pydantic.dev/1.10/) 实现的，它是 `pydantic.BaseModel` 的子类，同时进行了一些扩展，使其可以更好地适用于配置的读取。
+
+我们可以使用 `pydantic` 提供的一些特性，例如 `validator`，它可以用于对配置项进行合法性检查。
+
+```python title=weather/config.py
+from kirami.config import BaseConfig
+from pydantic import validator
+
+class Config(BaseConfig):
+    api_key: str
+    command_to_me: bool = True
+
+    @validator("api_key")
+    def check_api_key(cls, v):
+        if isinstance(v, str) and len(v) < 10:
+            return v
+        raise ValueError("天气 API Key 不合法")
+```
+
+在上例中，我们定义了一个 `check_api_key` 方法，它用于检查 `api_key` 配置项的合法性。更多关于 `pydantic` 的用法，可以参考 [pydantic 官方文档](https://docs.pydantic.dev/1.10/)。
+
+:::
+
+## 配置文件
+
+KiramiBot 的配置文件我们在用户指南中的[配置](../../guide/tutorial/config)中已经介绍过了。这里我们以 `kirami.config.toml` 为例，在其中添加 `weather` 插件的配置：
+
+```toml title=kirami.config.toml
+[weather]
+api_key = "your_api_key"
+```
+
+## 读取配置
+
+在定义好配置模型和配置文件后，我们就可以在插件中读取配置了。例如在 `weather/__init__.py` 中：
+
+```python {5,7} title=weather/__init__.py
+from kirami import on_prefix
+
+from .config import Config
+
+config = Config.load()
+
+weather = on_prefix("天气", "weather", "查天气", to_me=config.command_to_me)
+```
+
+然后，我们便可以从 `config` 中读取配置了，例如 `config.api_key`。
+
+这种方式可以简洁、高效地读取配置项，同时也可以设置默认值或者在运行时对配置项进行合法性检查，防止由于配置项导致的插件出错等情况出现。
+
+:::caution 注意
+`Config.load()` 方法会自动读取插件名称对应的配置，例如在上例中，`Config.load()` 会读取 `weather` 对应的配置。如果你的插件名称与配置名称不同，那么你需要使用 `Config.load("config_name")` 来指定配置名称。
+:::
