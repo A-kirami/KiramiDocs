@@ -1,3 +1,56 @@
 ---
 title: 定时任务
 ---
+
+在实际使用中，定时任务是一个非常常见的需求，例如定时发送消息、定时执行任务等。我们使用了 [APScheduler](https://apscheduler.readthedocs.io/en/3.x/) (Advanced Python Scheduler) 为 KiramiBot 的定时任务提供了支持。
+
+## 使用定时响应器
+
+KiramiBot 将定时任务封装成 `on_time` 辅助函数，使定时任务的使用更加简便。当 `on_time` 的指定时间到达时，KiramiBot 会对所有 bot 广播定时事件。
+
+```python
+from kirami import on_time
+
+@on_time("interval", seconds=10)
+async def run_every_10_seconds():
+    pass
+```
+
+:::caution 注意
+`on_time` 无法使用 `Matcher` 对象直接发送消息，因为它是由 Bot 自身事件触发，而不是外部事件。我们需要通过[调用平台 API](api-calling#调用平台-api)的方式来获取信息或收发消息。
+:::
+
+## 添加定时任务
+
+此外，我们还可以使用 [APScheduler 官方文档](https://apscheduler.readthedocs.io/en/3.x/userguide.html#adding-jobs) 中提供的两种直接添加任务的方式：
+
+```python
+from kirami.utils import scheduler
+
+# 基于装饰器的方式
+@scheduler.scheduled_job("cron", hour="*/2", id="job_0", args=[1], kwargs={arg2: 2})
+async def run_every_2_hour(arg1: int, arg2: int):
+    pass
+
+# 基于 add_job 方法的方式
+def run_every_day(arg1: int, arg2: int):
+    pass
+
+scheduler.add_job(
+    run_every_day, "interval", days=1, id="job_1", args=[1], kwargs={arg2: 2}
+)
+```
+
+:::warning 注意
+由于 APScheduler 的定时任务并不是**由事件响应器所触发的事件**，因此其任务函数无法同[事件处理函数](../basic/handler#事件处理函数)一样通过[依赖注入](../basic/event-data#初识依赖注入)获取上下文信息，也无法通过事件响应器对象的方法进行任何操作，因此我们需要通过[调用平台 API](api-calling#调用平台-api)的方式来获取信息或收发消息。
+
+相对于事件处理依赖而言，编写定时任务更像是编写普通的函数，需要我们自行获取信息以及发送信息，请**不要**将事件处理依赖的特殊语法用于定时任务！
+:::
+
+关于 APScheduler 的更多使用方法，可以参考 [APScheduler 官方文档](https://apscheduler.readthedocs.io/en/3.x/index.html) 进行了解。
+
+## 配置 APScheduler
+
+可以使用 `apscheduler_config` 配置项来配置 `apscheduler`，它是一个 `dict` 类型的配置项，其键值对将会被传递给 `apscheduler` 的 `configure` 方法。
+
+关于 `apscheduler` 的相关配置，请参考[配置调度器](https://apscheduler.readthedocs.io/en/latest/userguide.html#scheduler-config)、[配置参数](https://apscheduler.readthedocs.io/en/latest/modules/schedulers/base.html#apscheduler.schedulers.base.BaseScheduler)。
