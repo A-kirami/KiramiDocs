@@ -172,6 +172,10 @@ html {
   @apply text-slate-600;
 }
 
+.theme-doc-footer-edit-meta-row > div:first-child {
+  @apply flex;
+}
+
 /* -------------------------------------------------------------------------- */
 
 /*                                   sidebar                                  */
