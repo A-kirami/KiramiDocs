@@ -28,7 +28,7 @@ weather = on_prefix("天气", "weather", "查天气", rule=is_enable, to_me=True
 
 `Rule` 是多个 `RuleChecker` 的集合，它会同时调用每个 `RuleChecker` 进行检查，只有当所有的检查都通过时，规则才匹配成功。例如：
 
-```python {10}
+```python {10} title=weather/__init__.py
 from kirami.rule import Rule
 from kirami.typing import Event
 
@@ -90,7 +90,7 @@ rule = Rule(some_checker)
 result = await rule(bot, event, state)
 ```
 
-只需要传入 `Bot` 对象、事件和会话状态，`Rule` 会并发调用所有 `RuleChecker` 进行检查，并返回结果。
+只需要传入 `Bot` 对象、事件和会话状态，`Rule` 会同时调用所有 `RuleChecker` 进行检查，并返回结果。
 
 ## 内置响应规则
 
