@@ -43,6 +43,10 @@ async def control(city: EventPlainText):
 superusers=["123456789"]
 ```
 
+import Chat from '@site/src/components/Chat'
+
+<Chat chats={[{ content: '添加城市广州', send: true }, { content: '已添加城市 广州' }]} />
+
 ## 自定义权限
 
 与事件响应规则类似，`PermissionChecker` 也是一个返回值为 `bool` 类型的依赖函数，即 `PermissionChecker` 支持依赖注入。例如，我们可以限制用户的指令调用次数：
