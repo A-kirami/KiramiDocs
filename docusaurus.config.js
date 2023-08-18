@@ -1,5 +1,7 @@
 // @ts-check
 
+const TerserPlugin = require('terser-webpack-plugin')
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'KiramiBot',
@@ -178,6 +180,28 @@ const config = {
           postcssOptions.plugins.push(require('postcss-nesting'))
           postcssOptions.plugins.push(require('@unocss/postcss'))
           return postcssOptions
+        },
+      }
+    },
+    async function esbuildPlugin() {
+      return {
+        name: 'docusaurus-esbuild',
+        configureWebpack(config) {
+          const isCI = process.env.CI
+          const cacheOptions = isCI ? { cache: false } : {}
+
+          const minimizer = new TerserPlugin({
+            minify: TerserPlugin.esbuildMinify,
+          })
+          const minimizers = config.optimization.minimizer?.map((m) => (m instanceof TerserPlugin ? minimizer : m))
+
+          return {
+            mergeStrategy: { 'optimization.minimizer': 'replace' },
+            optimization: {
+              minimizer: minimizers,
+            },
+            ...cacheOptions,
+          }
         },
       }
     },

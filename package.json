@@ -38,6 +38,7 @@
     "@unocss/eslint-config": "^0.55.0",
     "@unocss/postcss": "^0.55.0",
     "@unocss/preset-icons": "^0.55.0",
+    "esbuild": "^0.19.2",
     "eslint": "^8.47.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-import-resolver-typescript": "^3.6.0",
