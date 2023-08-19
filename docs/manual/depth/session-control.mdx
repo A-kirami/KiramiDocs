@@ -410,3 +410,17 @@ from kirami.matcher import Matcher
 async def _(matcher: Matcher):
     matcher.set_receive("key", Event())
 ```
+
+### get_argot
+
+获取指定的暗语内容。
+
+`get_argot` 操作接受一个 key 参数和一个可选的 default 参数。当暗语不存在时，将返回 default 或 `None`。
+
+```python
+from kirami.matcher import Matcher
+
+@matcher.handle()
+async def _(matcher: Matcher):
+    argot = matcher.get_argot("key", default=None)
+```
