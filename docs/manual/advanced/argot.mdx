@@ -48,12 +48,23 @@ async def use_argot(matcher: Matcher):
 
 ## 读取暗语消息
 
-要读取暗语消息，我们需要将辅助函数的 `argot` 参数设置为 `True`。这样，当暗语消息被回复时，我们就可以通过 `state.argot` 获得暗语消息的内容。
+要读取暗语消息，我们需要将辅助函数的 `argot` 参数设置为 `True`。这样，当暗语消息被回复时，我们就可以通过 `Matcher.get_argot` 获得暗语消息的内容。
 
 ```python
 @on_fullmatch("查看随机数", argot=True)
-async def get_argot(matcher: Matcher, state: State):
-    await matcher.send(f"本消息的随机数为: {state.argot['num']}")
+async def get_argot(matcher: Matcher):
+    num = matcher.get_argot("num")
+    await matcher.send(f"本消息的随机数为: {num}")
+```
+
+也可以通过依赖注入来获取暗语消息的内容:
+
+```python
+from kirami.depends import Argot
+
+@on_fullmatch("查看随机数", argot=True)
+async def get_argot(matcher: Matcher, num: Argot[int]):
+    await matcher.send(f"本消息的随机数为: {num}")
 ```
 
 :::caution 注意
