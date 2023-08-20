@@ -27,11 +27,29 @@ const FeatureList: FeatureItem[] = [
     description: <>支持多种权限控制方式，可自定义权限控制策略。</>,
     className: 'card__green',
   },
+  {
+    icon: 'i-ri:checkbox-blank-circle-line',
+    title: '生态兼容',
+    description: <>兼容 NoneBot2 原生插件，无需修改即可使用，无缝迁移项目。</>,
+    className: 'card__red',
+  },
+  {
+    icon: 'i-ri:battery-charge-line',
+    title: '内置电池',
+    description: <>丰富的内置功能，导入即用，为开发提供强劲动力。</>,
+    className: 'card__yellow',
+  },
+  {
+    icon: 'i-ri:file-code-line',
+    title: '开发友好',
+    description: <>简洁流畅的 API，更低的心智负担与学习成本。</>,
+    className: 'card__purple',
+  },
 ]
 
 function Feature({ title, icon, description, className }: FeatureItem) {
   return (
-    <div className={clsx('col col--4')}>
+    <div className={clsx('col col--4 mbe-8')}>
       <article className={clsx('card__article', className)}>
         <div className="card__scale">
           <div className="card__scale-1"></div>

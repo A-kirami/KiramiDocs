@@ -603,8 +603,8 @@ div[class^="announcementBar_"] {
 }
 
 .card__article {
-  --hue-1: 210;
-  --hue-2: 238;
+  --hue-1: 230;
+  --hue-2: 180;
   position: relative;
   display: flex;
   gap: 2rem;
@@ -702,6 +702,21 @@ div[class^="announcementBar_"] {
 .card__green {
   --hue-1: 180;
   --hue-2: 50;
+}
+
+.card__red {
+  --hue-1: 60;
+  --hue-2: 0;
+}
+
+.card__yellow {
+  --hue-1: 80;
+  --hue-2: 40;
+}
+
+.card__purple {
+  --hue-1: 210;
+  --hue-2: 300;
 }
 
 .card__scale-1 {
