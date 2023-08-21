@@ -160,9 +160,9 @@ const config = {
           placeholder: '想找点什么？',
           provider: {
             name: 'algolia',
-            apiKey: 'YOUR-ALGOLIA-API-KEY',
-            appId: 'YOUR-ALGOLIA-APP-ID',
-            indexName: 'YOUR-ALGOLIA-INDEX-NAME',
+            apiKey: '52d50f9789b65f6584dec4190fa0249c',
+            appId: '7TK7BATJ6O',
+            indexName: 'kiramibot',
           },
           getHref: (result) => result.url,
           getHeading: (result) => result.pageTitle,
