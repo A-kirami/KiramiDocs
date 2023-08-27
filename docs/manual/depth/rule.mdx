@@ -10,7 +10,7 @@ title: 响应规则
 `RuleChecker` 是一种返回值为 `bool` 类型的依赖函数，它支持依赖注入。我们可以根据上一节中添加的[配置项](./plugin-config#配置模型)，在 `weather` 插件目录中编写一个响应规则：
 
 ```python {3,4} title=weather/__init__.py
-config = Config.load()
+config = Config.load_config()
 
 async def is_allow(city: EventPlainText) -> bool:
     return city in config.allow_cities
@@ -50,7 +50,7 @@ weather = on_prefix("天气", "weather", "查天气", rule=rule, to_me=True)
 为了更好地复用规则，我们可以将规则进行细分，然后在使用时进行合并。除了使用 `Rule` 对象来组合多个 `RuleChecker`，我们还可以对 `Rule` 对象进行合并。例如：
 
 ```python {10} title=weather/__init__.py
-config = Config.load()
+config = Config.load_config()
 
 async def is_allow(city: EventPlainText) -> bool:
     return city in config.allow_cities
