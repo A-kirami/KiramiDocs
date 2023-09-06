@@ -61,10 +61,9 @@ plugin_dirs=["src/plugins"]
 from kirami import KiramiBot
 
 bot = KiramiBot()
-app = bot.asgi
 
 if __name__ == "__main__":
-    bot.run(app="__mp_main__:app")
+    bot.run()
 ```
 
 ## 完成

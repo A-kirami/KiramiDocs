@@ -38,6 +38,20 @@ KiramiBot 同时还兼容 NoneBot2 的 [dotenv 配置文件](https://nonebot.dev
 
 Bot 主要配置。这部分的配置支持通过 dotenv 配置文件或者环境变量传递。
 
+#### driver
+
+- 类型: `str`
+- 默认值: `"~fastapi"`
+
+KiramiBot 运行所使用的 `Driver`。
+
+#### adapters
+
+- 类型: `set[str]`
+- 默认值: `{"~onebot.v11"}`
+
+KiramiBot 所使用的 `Adapter`。
+
 #### host
 
 - 类型: `str`
@@ -149,6 +163,13 @@ HTTP 请求超时时间，单位: 秒。
 - 默认值: `"Asia/Shanghai"`
 
 时区。
+
+#### default_policy_allow
+
+- 类型: `set[str]`
+- 默认值: `{"*"}`
+
+默认权限策略允许的内容列表。
 
 ### Plugin
 
