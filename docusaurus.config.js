@@ -139,7 +139,7 @@ const config = {
       },
       prism: {
         theme: { plain: {}, styles: [] },
-        additionalLanguages: ['toml'],
+        additionalLanguages: ['toml', 'powershell'],
       },
       colorMode: {
         respectPrefersColorScheme: true,

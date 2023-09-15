@@ -14,6 +14,35 @@ title: 介绍
 
 </div>
 
+## 🚀 弹射起步
+
+有手就行，3分钟搭建好属于你的 KiramiBot！
+
+在终端中执行以下命令，它会为你自动安装好 [Kirami CLI](https://github.com/A-kirami/KiramiCLI)。
+
+import CodeBlock from '@theme/CodeBlock'
+import TabItem from '@theme/TabItem'
+import Tabs from '@theme/Tabs'
+
+<Tabs>
+  <TabItem value="windows" label="Windows" default>
+    <CodeBlock language="powershell">
+      (Invoke-WebRequest -Uri https://install.kiramibot.dev -UseBasicParsing).Content | py -
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="linux" label="Linux">
+    <CodeBlock language="bash">curl -sSL https://install.kiramibot.dev | python3 -</CodeBlock>
+  </TabItem>
+</Tabs>
+
+接下来运行下面的命令创建 KiramiBot 项目：
+
+```bash
+kirami create
+```
+
+跟随提示完成配置，恭喜你，你已经成功创建了一个 KiramiBot 项目！
+
 ## ✨ 闪光点
 
 - 🎁 **开箱即用**
