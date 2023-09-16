@@ -1,8 +1,8 @@
 ---
-title: 安装插件
+title: 插件
 ---
 
-为了让项目尽可能地轻盈简洁，KiramiBot 本身并没有内置任何插件。为了让你的机器人拥有更多的功能，你需要安装插件。
+为了让项目尽可能地轻盈简洁，KiramiBot 本身并没有内置任何插件。为了让你的机器人拥有更多的功能，你需要安装或开发插件。
 
 ## KiramiBot 插件
 
@@ -24,9 +24,32 @@ KiramiBot 的商店还在建设中，目前只有少量插件可用。如果你�
 
 1. 运行以下命令安装插件：
 
-```shell
+import TabItem from '@theme/TabItem'
+import Tabs from '@theme/Tabs'
+
+<Tabs groupId="package-manager">
+<TabItem value="pdm" label="PDM" default>
+
+```bash
 pdm add kirami-plugin-helloworld
 ```
+
+</TabItem>
+<TabItem value="poetry" label="Poetry">
+
+```bash
+poetry add kirami-plugin-helloworld
+```
+
+</TabItem>
+<TabItem value="pip" label="pip">
+
+```bash
+pip install kirami-plugin-helloworld
+```
+
+</TabItem>
+</Tabs>
 
 2. 在 `kirami.config.toml` 的 `plugin` 部分添加插件名：
 
