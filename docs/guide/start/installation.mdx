@@ -1,0 +1,77 @@
+---
+title: 安装
+---
+
+在本章节中，我们将使用 Kirami CLI 脚手架创建和运行你的第一个 KiramiBot 项目。
+
+:::caution 注意
+在开始安装 KiramiBot 之前，请确保满足以下条件：
+
+- Python 版本 >= 3.10
+- (可选) 虚拟环境：我们建议在虚拟环境中进行安装，以避免与其他项目发生冲突。如果没有使用虚拟环境，请确保已卸载可能存在的 NoneBot。
+
+  ```bash
+  pip uninstall nonebot
+  ```
+
+:::
+
+## 安装脚手架
+
+安装 KiramiBot 最简单的方法是使用 [Kirami CLI](https://github.com/A-kirami/KiramiCLI)，它可以帮助你快速创建一个 KiramiBot 项目。
+
+import TabItem from '@theme/TabItem'
+import Tabs from '@theme/Tabs'
+
+<Tabs groupId="platform">
+<TabItem value="windows" label="Windows" default>
+
+```powershell
+(Invoke-WebRequest -Uri https://install.kiramibot.dev -UseBasicParsing).Content | py -
+```
+
+</TabItem>
+<TabItem value="linux" label="Linux">
+
+```bash
+curl -sSL https://install.kiramibot.dev | python3 -
+```
+
+</TabItem>
+</Tabs>
+
+安装完成后，你可以在命令行使用 `kirami` 命令来使用脚手架。
+
+## 创建项目
+
+在你想要创建项目的位置运行此命令，它将创建一个包含所需文件的新目录。
+
+```bash
+kirami create
+```
+
+这个命令将引导你完成项目的创建过程，你需要回答一些问题以定制化你的项目。
+
+## 数据库
+
+KiramiBot 使用 MongoDB 作为数据库，因此你还需要安装 MongoDB 才能正常运行。
+
+你可以在 [MongoDB 官网](https://www.mongodb.com/try/download/community) 下载并安装它，也可以使用 Docker 安装。
+
+## 运行项目
+
+在创建项目和配置数据库之后，你可以在**项目根目录**中使用以下命令来运行项目：
+
+```bash
+kirami run
+```
+
+恭喜，你现在成功运行了你的第一个 KiramiBot 项目！
+
+## 使用体验
+
+[Matcha](https://github.com/A-kirami/matcha) 是一个模拟聊天交互的辅助开发工具，你可以使用它来快速体验你的 KiramiBot 项目。
+
+import Chat from '@site/src/components/Chat'
+
+<Chat chats={[{ content: 'hello', send: true }, { content: 'world' }]} title="Matcha" />

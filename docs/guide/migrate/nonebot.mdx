@@ -2,94 +2,44 @@
 title: 从 NoneBot2 迁移
 ---
 
-由于 KiramiBot 兼容 NoneBot2 的插件和配置，因此你可以很简单的从 NoneBot2 迁移到 KiramiBot 。
+KiramiBot 兼容 NoneBot2 的插件和配置，你可以很简单的从 NoneBot2 迁移到 KiramiBot。
 
-## 安装 KiramiBot
+## 迁移步骤
 
-在原 NoneBot2 项目中安装 KiramiBot。
+### 1. 安装 Kirami CLI
 
-import TabItem from '@theme/TabItem'
-import Tabs from '@theme/Tabs'
+首先，确保你已经安装了 Kirami CLI。如果还没有安装，可以参考 [安装脚手架](../start/installation#安装脚手架) 进行安装。
 
-<Tabs groupId="package-manager">
-<TabItem value="pdm" label="PDM" default>
+### 2. 迁移你的 NoneBot2 项目
 
-```bash
-pdm add kiramibot
-```
-
-</TabItem>
-<TabItem value="poetry" label="Poetry">
+使用 Kirami CLI 提供的 `kirami migrate` 命令来迁移你的 NoneBot2 项目。
 
 ```bash
-poetry add kiramibot
+kirami migrate
 ```
 
-</TabItem>
-<TabItem value="pip" label="pip">
+### 3. 配置 KiramiBot
+
+在迁移完成后，检查 KiramiBot 的配置文件，确保它们满足你的需求。你可能需要进行一些微调，以适应 KiramiBot 的环境和特性。
+
+### 4. 启动 KiramiBot
+
+一旦配置完成，你可以使用以下命令来启动 KiramiBot：
 
 ```bash
-pip install kiramibot
+kirami run
 ```
 
-</TabItem>
-</Tabs>
+## 迁移注意事项
 
-## 添加配置
+在迁移过程中，有一些需要注意的事项：
 
-将 `pyproject.toml` 中的 `tool.nonebot` 的插件加载配置复制到 KiramiBot 的[配置文件](../tutorial/config)中。
+- KiramiBot 和 NoneBot2 在某些方面可能有不同的行为或特性。请确保你的插件在 KiramiBot 上运行正常，并根据需要进行调整。
 
-```toml title="pyproject.toml"
-[tool.nonebot]
-plugins=["plugins"]
-plugin_dirs=["src/plugins"]
-```
+- 如果你的 NoneBot2 项目依赖于特定的插件，请确保这些插件在 KiramiBot 上可用或找到了替代方案。
 
-这里以 `kirami.config.toml` 为例，将配置复制到 `kirami.config.toml` 中。
+- 阅读 KiramiBot 的文档以了解其功能和配置选项。这将帮助你更好地理解如何在 KiramiBot 上管理你的机器人。
 
-```toml title="kirami.config.toml"
-[plugin]
-plugins=["plugins"]
-plugin_dirs=["src/plugins"]
-```
+完成以上步骤后，你就成功地将你的 NoneBot2 项目迁移到了 KiramiBot，并可以享受 KiramiBot 提供的新特性和改进了！
 
-## 添加入口
-
-最后在项目根目录中创建一个 `bot.py` 文件，内容如下：
-
-```python title="bot.py"
-from kirami import KiramiBot
-
-bot = KiramiBot()
-
-if __name__ == "__main__":
-    bot.run()
-```
-
-## 完成
-
-至此，你已经完成了从 NoneBot2 到 KiramiBot 的迁移，运行 `bot.py` 来启动你的机器人吧。
-
-<Tabs groupId="package-manager">
-<TabItem value="pdm" label="PDM" default>
-
-```bash
-pdm run bot.py
-```
-
-</TabItem>
-<TabItem value="poetry" label="Poetry">
-
-```bash
-poetry run python bot.py
-```
-
-</TabItem>
-<TabItem value="pip" label="pip">
-
-```bash
-python bot.py
-```
-
-</TabItem>
-</Tabs>
+如果你遇到任何问题或需要进一步的帮助，请随时查阅 KiramiBot 的官方文档或寻求社区支持。
