@@ -154,6 +154,10 @@ html {
   & li>p {
     @apply mb-0;
   }
+
+  & ul li p+p {
+    @apply mt-0.5;
+  }
 }
 
 .theme-last-updated {

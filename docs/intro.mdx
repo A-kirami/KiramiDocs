@@ -4,38 +4,43 @@ title: 介绍
 
 <div className="intro">
 
-🌟 读作 Kirami，写作星见，简明轻快的 **聊天机器人应用**。
+🌟 读作 Kirami，写作星见，简明轻快的**聊天机器人应用**。
 
 🩹 无痛安装，易于使用，萌新上手也无压力。
 
 🧰 轻松开发，更低负担，在这里展现你的创意。
 
-⭐️ KiramiBot 基于 **[NoneBot2](https://v2.nonebot.dev/)** 开发，采用 **[OneBotV11](https://11.onebot.dev/)** 协议通信，能够在**协议支持的平台**上与用户进行交互。
+⭐️ KiramiBot 是一个功能强大的机器人框架，它可以帮助你创建自定义的聊天机器人，用于自动化任务、聊天交互和更多用途。不论你是开发者还是爱好者，KiramiBot 提供了一个灵活而强大的平台，让你轻松构建自己的机器人应用。
 
 </div>
 
 ## 🚀 弹射起步
 
-有手就行，3分钟搭建好属于你的 KiramiBot！
+有手就行，只需几分钟，即可开始你的 KiramiBot 之旅！
 
-在终端中执行以下命令，它会为你自动安装好 [Kirami CLI](https://github.com/A-kirami/KiramiCLI)。
+在终端中执行以下命令，它将自动安装 [Kirami CLI](https://github.com/A-kirami/KiramiCLI)。
 
-import CodeBlock from '@theme/CodeBlock'
 import TabItem from '@theme/TabItem'
 import Tabs from '@theme/Tabs'
 
-<Tabs>
-  <TabItem value="windows" label="Windows" default>
-    <CodeBlock language="powershell">
-      (Invoke-WebRequest -Uri https://install.kiramibot.dev -UseBasicParsing).Content | py -
-    </CodeBlock>
-  </TabItem>
-  <TabItem value="linux" label="Linux">
-    <CodeBlock language="bash">curl -sSL https://install.kiramibot.dev | python3 -</CodeBlock>
-  </TabItem>
+<Tabs groupId="platform">
+<TabItem value="windows" label="Windows" default>
+
+```powershell
+(Invoke-WebRequest -Uri https://install.kiramibot.dev -UseBasicParsing).Content | py -
+```
+
+</TabItem>
+<TabItem value="linux" label="Linux">
+
+```bash
+curl -sSL https://install.kiramibot.dev | python3 -
+```
+
+</TabItem>
 </Tabs>
 
-接下来运行下面的命令创建 KiramiBot 项目：
+接下来运行以下命令创建你的 KiramiBot 项目：
 
 ```bash
 kirami create
@@ -47,25 +52,37 @@ kirami create
 
 - 🎁 **开箱即用**
 
-  - 无门槛一键安装，初次接触更易上手，小白也能即装即用。
+  无门槛一键安装，无需复杂的设置，小白也能迅速上手。
 
 - 🎛️ **插件管理**
 
-  - 非侵入式的插件管理系统，支持更细粒度的功能与权限控制，更加便于维护和管理。
+  非侵入式插件管理系统，支持精细的功能和权限控制，更易于维护和管理。
 
 - 🤝 **开发友好**
 
-  - KiramiBot 拥有完整的类型注解，同时提供了常用的功能模块，帮助开发者专注于功能本身。
+  KiramiBot 具备完整的类型注解，提供常用的功能模块，助力开发者专注于核心功能。
 
 - 🍀 **生态兼容**
-  - 兼容 NoneBot2 原生插件，无需修改代码即可使用，无缝迁移项目。
+
+  原生支持 **[NoneBot2](https://v2.nonebot.dev/)** 插件，无需修改代码即可平滑迁移项目。
 
 ## 🪧 设计理念
 
-- 🐣 **面向用户** - KiramiBot 应简单易用，即使是毫无编程基础的用户，也可以快速上手，做到真正的零门槛。
-- 💖 **开发友好** - KiramiBot 应降低开发者的心智负担与学习成本，同时减少开发时的复杂度与代码量，让开发更加轻松省力。
-- ✍ **规范标准** - KiramiBot 应提供开发规范，统一标准，降低开发者的选择成本与维护成本。
-- 🔋 **内置电池** - KiramiBot 应提供丰富的内置功能，让开发者不必重复造轮子，大多数需要的功能都能通过导入内置模块实现。
+- 🐣 **用户为本**
+
+  KiramiBot 以简单易用为目标，即使没有编程经验的用户也能快速上手，零门槛体验。
+
+- 💖 **开发友好**
+
+  KiramiBot 旨在降低开发者的心智负担和学习成本，减少开发的复杂度和代码量，让开发更加轻松高效。
+
+- ✍ **规范标准**
+
+  KiramiBot 提供开发规范和统一标准，降低开发者的选择成本与维护成本。
+
+- 🔋 **内置电池**
+
+  KiramiBot 内置丰富功能，避免重复造轮子，大多数功能可通过导入内置模块实现。
 
 ## 🧐 帮助改进
 
