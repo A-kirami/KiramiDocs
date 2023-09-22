@@ -6,7 +6,7 @@ const TerserPlugin = require('terser-webpack-plugin')
 const config = {
   title: 'KiramiBot',
   tagline: '读作 Kirami，写作星见，简明轻快的聊天机器人应用',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/favicon.png',
 
   url: 'https://docs.kiramibot.com',
   baseUrl: '/',
