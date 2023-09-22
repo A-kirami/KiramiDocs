@@ -947,3 +947,35 @@ div[class^="announcementBar_"] {
     }
   }
 }
+
+
+/* -------------------------------------------------------------------------- */
+
+/*                        dark/light radial transition                        */
+
+/* -------------------------------------------------------------------------- */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: none;
+}
+
+::view-transition-old(root) {
+  @apply z-[var(--view-transition-old-z)];
+}
+
+::view-transition-new(root) {
+  @apply z-[var(--view-transition-new-z)];
+}
+
+:root {
+  --view-transition-old-z: 9999;
+  --view-transition-new-z: 1;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+[data-theme='dark'] {
+  --view-transition-old-z: 1;
+  --view-transition-new-z: 9999;
+}
