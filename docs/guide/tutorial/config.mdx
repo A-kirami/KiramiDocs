@@ -15,7 +15,7 @@ title: 配置
 
 KiramiBot 支持三种格式的配置文件：toml、yaml 和 json。我们建议使用 toml 格式的配置文件，你也可以根据个人偏好选择其中之一。
 
-配置文件需位于项目根目录下，通常文件名为 `kirami` 或者 `kirami.config`，后缀分别为 `toml`、`yaml` 或者 `json`。
+配置文件需位于项目根目录下，通常文件名为 `kirami` 或者 `kirami.config`，文件类型可以为 `toml`、`yaml` 或者 `json`。
 
 配置文件的优先级顺序为：
 
@@ -26,7 +26,7 @@ KiramiBot 支持三种格式的配置文件：toml、yaml 和 json。我们建�
 5. `kirami.json`
 6. `kirami.config.json`
 
-如果以上文件都不存在，KiramiBot 会尝试从 `pyproject.toml` 的 `tool.kirami` 配置中读取。
+如果以上文件都不存在，KiramiBot 会尝试从 `pyproject.toml` 文件中的 `tool.kirami` 配置中读取。
 
 :::info 提示
 KiramiBot 同时还兼容 NoneBot2 的 [dotenv 配置文件](https://nonebot.dev/docs/appendices/config#dotenv-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6)，你可以使用它来传递部分配置。
