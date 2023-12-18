@@ -86,7 +86,7 @@ async def got_location(location: ArgPlainText):
 因为 `set_arg` 的参数值要求为 `Message` 对象，所以我们需要使用 `EventMessage` 来获取用户输入的消息对象，而不是使用 `EventPlainText` 来获取纯文本消息。
 :::
 
-:::caution 注意
+:::warning 注意
 设置参数需要使用依赖注入来获取 `Matcher` 实例以确保上下文正确。
 :::
 
@@ -124,7 +124,7 @@ async def got_location(location: ArgPlainText):
 
 该操作将会向用户发送 `reject` 参数中的消息，并等待用户回复后，重新执行 `got_location` 函数。通过 `got` 和 `reject` 事件响应器操作，我们实现了类似于**循环**的执行方式。
 
-:::caution 注意
+:::warning 注意
 与 `finish` 类似，`reject` 会在向机器人用户发送消息内容后抛出 `RejectedException` 异常来暂停事件响应流程，以等待用户的回复。也就是说，在 `reject` 后面的代码将不会被执行。
 :::
 
@@ -337,7 +337,7 @@ async def _(matcher: Matcher):
     matcher.stop_propagation()
 ```
 
-:::warning 注意
+:::danger 注意
 `stop_propagation` 操作是实例方法，需要先通过依赖注入获取事件响应器实例再进行调用。
 :::
 

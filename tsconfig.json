@@ -1,9 +1,7 @@
 {
-  "extends": "@tsconfig/docusaurus/tsconfig.json",
+  "extends": "@docusaurus/tsconfig",
   "compilerOptions": {
     "baseUrl": ".",
-    "lib": ["ESNext", "DOM"],
-    "types": ["@docusaurus/module-type-aliases", "@docusaurus/theme-classic"],
-    "jsx": "react-jsx"
+    "lib": ["ESNext", "DOM"]
   }
 }

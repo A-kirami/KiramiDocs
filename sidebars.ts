@@ -1,7 +1,6 @@
-// @ts-check
+import type { SidebarsConfig } from '@docusaurus/plugin-content-docs'
 
-/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
-const sidebars = {
+export default {
   tutorial: [
     'intro',
     {
@@ -78,6 +77,4 @@ const sidebars = {
       dirName: 'community',
     },
   ],
-}
-
-module.exports = sidebars
+} satisfies SidebarsConfig

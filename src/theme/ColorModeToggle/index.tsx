@@ -11,6 +11,7 @@ import type { ColorMode } from '@docusaurus/theme-common'
 import type { Props } from '@theme/ColorModeToggle'
 import type { MouseEvent } from 'react'
 
+// NOTE: 主题切换过渡动画
 interface IDocument extends Document {
   startViewTransition(callback: () => void): { ready: Promise<void> }
 }

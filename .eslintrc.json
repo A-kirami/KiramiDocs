@@ -1,7 +1,7 @@
 {
   "env": {
     "browser": true,
-    "es2021": true,
+    "es2022": true,
     "node": true
   },
   "extends": [
@@ -27,7 +27,7 @@
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    "linebreak-style": ["warn", "windows"],
+    "linebreak-style": "off",
     "quotes": ["warn", "single"],
     "semi": ["warn", "never"],
     "object-shorthand": ["warn", "always"],
