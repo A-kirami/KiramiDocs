@@ -76,7 +76,7 @@ function createLighthouseReport({ results, links }) {
       reportUrl: reportPublicUrl,
     })
   })
-  const comment = ['### ⚡️ 此 PR 的部署预览的 Lighthouse 报告', '', ...tableHeader, ...tableBody, '']
+  const comment = ['### ⚡️ 此 PR 部署预览的 Lighthouse 报告', '', ...tableHeader, ...tableBody, '']
   return comment.join('\n')
 }
 
