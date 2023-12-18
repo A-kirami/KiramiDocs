@@ -97,7 +97,6 @@
     "no-alert": "warn",
     "no-eval": "error",
     "no-trailing-spaces": "warn",
-    "no-inline-comments": "warn",
     // "lines-around-comment": ["warn", {"allowBlockStart": true, "allowObjectStart": true, "allowArrayStart": true, "allowClassStart": true}],
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
