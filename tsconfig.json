@@ -1,8 +1,6 @@
 {
-  "extends": "@tsconfig/docusaurus/tsconfig.json",
+  "extends": "@docusaurus/tsconfig",
   "compilerOptions": {
-    "baseUrl": ".",
-    "types": ["@docusaurus/module-type-aliases", "@docusaurus/theme-classic"],
-    "jsx": "react-jsx"
+    "baseUrl": "."
   }
 }

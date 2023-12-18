@@ -81,6 +81,6 @@ weather = on_prefix("天气", "weather", "查天气", to_me=config.command_to_me
 
 这种方式可以简洁、高效地读取配置项，同时也可以设置默认值或者在运行时对配置项进行合法性检查，防止由于配置项导致的插件出错等情况出现。
 
-:::caution 注意
+:::warning 注意
 `Config.load_config()` 方法会自动读取插件名称对应的配置，例如在上例中，`Config.load_config()` 会读取 `weather` 对应的配置。如果你的插件名称与配置名称不同，那么你需要使用 `Config.load("config_name")` 来指定配置名称。
 :::

@@ -1,5 +1,4 @@
-import presetIcons from '@unocss/preset-icons'
-import { defineConfig, presetAttributify, presetUno, transformerDirectives } from 'unocss'
+import { defineConfig, presetUno, presetAttributify, presetIcons, transformerDirectives } from 'unocss'
 
 export default defineConfig({
   content: {

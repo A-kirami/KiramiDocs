@@ -109,7 +109,7 @@ async def _(matcher: Matcher):
 
 `on_command` 是一个消息事件响应器，它会响应所有以指定命令开头的消息事件。
 
-:::caution 注意
+:::warning 注意
 `on_command` 受到配置项中的 [`command_start`](../../guide/tutorial/config#command_start) 的影响，需要在命令前额外加上 `command_start` 才能触发响应。
 
 默认配置下，`on_command` 只会对以 `/` 和空命令头开头的消息事件进行响应。
@@ -144,7 +144,7 @@ async def _(matcher: Matcher):
 
 `ArgumentParser` 参考文档: [argparse](https://docs.python.org/3/library/argparse.html)
 
-:::caution 注意
+:::warning 注意
 `on_shell_command` 受到配置项中的 [`command_start`](../../guide/tutorial/config#command_start) 的影响，需要在命令前额外加上 `command_start` 才能触发响应。
 
 默认配置下，`on_shell_command` 只会对以 `/` 和空命令头开头的消息事件进行响应。
@@ -344,7 +344,7 @@ async def _(matcher: Matcher):
 
 `on_time` 是一个定时事件响应器，它会在指定时间到达时响应。
 
-:::caution 注意
+:::warning 注意
 `on_time` 无法使用 `Matcher` 对象直接发送消息，因为它是由 Bot 自身事件触发，而不是外部事件。
 :::
 

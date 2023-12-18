@@ -68,7 +68,7 @@ title: 认识插件
 
 创建了插件的基本结构后，接下来我们将学习如何在 KiramiBot 中加载这些插件。
 
-:::caution 注意
+:::warning 注意
 加载的插件模块名称（插件文件名或文件夹名）不能相同，且每一个插件只能被加载一次，重复加载将会导致异常。
 :::
 
@@ -83,7 +83,7 @@ plugins=["plugins.weather"]
 
 在上述配置中，我们将 `plugins.weather` 添加到了 `plugins` 中，这会加载指定的插件，通常用于加载第三方插件或者项目插件。
 
-:::caution 注意
+:::warning 注意
 对于本地项目插件，应使用点分割的模块名称，例如 `plugins.weather`，而不是 `plugins/weather`。
 :::
 

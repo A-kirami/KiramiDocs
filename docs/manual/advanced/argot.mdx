@@ -67,6 +67,6 @@ async def get_argot(matcher: Matcher, num: Argot[int]):
     await matcher.send(f"本消息的随机数为: {num}")
 ```
 
-:::caution 注意
+:::warning 注意
 当 `argot` 设置为 `True` 时，为了确保最优先处理暗语消息，事件响应器的优先级会被强制设置为 `0`。
 :::
