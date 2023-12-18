@@ -20,15 +20,16 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
-      - name: Sync node version and setup cache
-        uses: actions/setup-node@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Yarn install
         uses: ./.github/actions/yarn-nm-install
@@ -36,7 +37,7 @@ jobs:
           enable-corepack: true
 
       - name: Build Doc
-        run: yarn build
+        run: yarn build --dev
 
       - name: Get Deploy Name
         run: |
