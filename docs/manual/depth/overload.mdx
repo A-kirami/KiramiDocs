@@ -20,7 +20,7 @@ async def got_location(event: MessageEvent, location: ArgPlainText):
 
 在上述代码中，我们获取了消息事件所提供的发送时间 `time` 属性。有关事件类型和属性的详细信息可以参考 [OneBotV11 事件](https://github.com/botuniverse/onebot-11/tree/master/event)。
 
-:::danger 注意
+:::danger 警告
 如果**基类**就能满足你的需求，那么就**不要修改**事件参数类型注解，这样可以使你的代码更加**通用**。
 :::
 
@@ -120,7 +120,7 @@ async def handle_group(event: GroupMessageEvent):
 
 这样，机器人用户就会在私聊和群聊中分别收到不同的回复。
 
-:::danger 注意
+:::danger 警告
 重载机制适用于所有的参数类型注解。因此，依赖注入也可以利用这个特性来处理不同的返回值。
 
 但 Bot、Event 和 Matcher 三者的参数类型注解具有最高检查优先级，如果其中任一类型注解不匹配，那么其他依赖注入将不会执行（如：`depends`）。
