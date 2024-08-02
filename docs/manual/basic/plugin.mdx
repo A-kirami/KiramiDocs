@@ -74,7 +74,7 @@ title: 认识插件
 
 ### 加载单个插件
 
-修改根目录下的 `kirami.config.toml` 文件，在 `plugin` 部分的 `plugins` 字段添加插件的路径：
+修改根目录下的 `kirami.config.toml` 文件，在 `plugin` 部分的 `plugins` 字段添加插件：
 
 ```toml title=kirami.config.toml
 [plugin]
@@ -83,13 +83,9 @@ plugins=["plugins.weather"]
 
 在上述配置中，我们将 `plugins.weather` 添加到了 `plugins` 中，这会加载指定的插件，通常用于加载第三方插件或者项目插件。
 
-:::warning 注意
-对于本地项目插件，应使用点分割的模块名称，例如 `plugins.weather`，而不是 `plugins/weather`。
-:::
-
 ### 加载插件目录
 
-修改根目录下的 `kirami.config.toml` 文件，在 `plugin` 部分的 `plugin_dirs` 字段添加插件文件夹的路径：
+修改根目录下的 `kirami.config.toml` 文件，在 `plugin` 部分的 `plugin_dirs` 字段添加插件文件夹：
 
 ```toml title=kirami.config.toml
 [plugin]
@@ -97,6 +93,21 @@ plugin_dirs=["plugins"]
 ```
 
 在上述配置中，我们将 `plugins` 文件夹添加到了 `plugin_dirs` 中，这会加载文件夹中的所有插件，通常用于加载一系列本地编写的项目插件。
+
+### 插件加载优先级
+
+对于多个插件或者多个插件文件夹，我们可以通过添加插件优先级来控制插件的加载顺序。
+
+只要在插件或者插件文件夹后面添加 `:` 和一个数字，就可以指定插件的优先级，数字越小优先级越高。
+
+如果未指定加载优先级，默认为无穷大，可以通过修改配置项 [`plugin_priority`](../../guide/tutorial/config#plugin_priority) 来设置默认优先级。
+
+```toml title=kirami.config.toml
+[plugin]
+plugins=["plugin1", "plugin2:1"]
+```
+
+在上述配置中，`plugin2` 的优先级为 1，将会先于 `plugin1` 加载。
 
 ## 测试插件
 
